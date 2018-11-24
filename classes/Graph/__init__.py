@@ -7,6 +7,7 @@ class Graph:
         self.nodes = nodes
         self.edges = edges
 
+    # Возвращает путь как массив тэгов вершин и мин. длину кортежем
     def brute_force(self, node_from, node_to_):
         way = list()
         way.append(node_from)
@@ -30,29 +31,30 @@ class Graph:
 
                 # Если нашли еще один короткий путь
                 if i.n_to == node_to_ and min_length == current_length:
-                    print("GOT ANOTHER ONE MIN")
+                    # print("GOT ANOTHER ONE MIN")
                     ways.append(way.copy())
 
                 # Если нашли путь короче самого короткого
                 if i.n_to == node_to_ and (min_length == -1 or min_length > current_length):
-                    print("GOT NEW MIN LENGTH")
+                    # print("GOT NEW MIN LENGTH")
                     ways = list()
                     ways.append(way.copy())
                     min_length = current_length
 
                 # Не нашли путь и идем дальше
                 if i.n_to != node_to_:
-                    print("Move from {} to {}".format(curr_node.tag, i.n_to.tag))
+                    # print("Move from {} to {}".format(curr_node.tag, i.n_to.tag))
                     search(i.n_to)
-                    print("Back from {} to {}".format(curr_node.tag, i.n_to.tag))
+                    # print("Back from {} to {}".format(curr_node.tag, i.n_to.tag))
                 current_length -= i.get_weight()
                 depth -= 1
                 way.pop()
 
         search(node_from)
-        print(min_length)
-        return ways
+        # print(min_length)
+        return ways, min_length
 
+    # Поиск по тэгам
     def brute_by_tags(self, tag_from, tag_to):
         return self.brute_force(self.__get_node_by_tag(tag_from), self.__get_node_by_tag(tag_to))
 
