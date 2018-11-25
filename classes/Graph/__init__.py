@@ -19,7 +19,7 @@ class Graph:
         def search(curr_node):
             nonlocal current_length, min_length
             nonlocal way, depth, node_to_, ways
-            next_ways = self.__get_all_edges_from(curr_node)
+            next_ways = self._get_all_edges_from(curr_node)
             for i in next_ways:
 
                 # Если уже проходили вершину
@@ -60,7 +60,7 @@ class Graph:
 
     # Поиск по тэгам
     def brute_by_tags(self, tag_from, tag_to):
-        return self.brute_force(self.__get_node_by_tag(tag_from), self.__get_node_by_tag(tag_to))
+        return self.brute_force(self._get_node_by_tag(tag_from), self._get_node_by_tag(tag_to))
 
     # Вспомогательные паблик методы
     def read_graph_as_matrix(self, filename):
@@ -94,20 +94,26 @@ class Graph:
             print()
         pass
 
+    def get_nodes(self):
+        return self.nodes
+
+    def get_edges(self):
+        return self.edges
+
     # Вспомогательные приватные методы
-    def __get_node_by_xy(self, x, y):
+    def _get_node_by_xy(self, x, y):
         for i in self.nodes:
             if i.x == x and i.y == y:
                 return i
         return 0
 
-    def __get_node_by_tag(self, tag):
+    def _get_node_by_tag(self, tag):
         for i in self.nodes:
             if i.tag == tag:
                 return i
         return 0
 
-    def __get_all_edges_from(self, node_from):
+    def _get_all_edges_from(self, node_from):
         result = []
         for i in self.edges:
             if i.n_from == node_from:
