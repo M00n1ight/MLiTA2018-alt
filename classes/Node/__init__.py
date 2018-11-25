@@ -8,4 +8,8 @@ class Node:
         self.y = y
         self.id = Node.id_
         Node.id_ += 1
+
+    def __str__(self):
+        return self.tag
+
     pass

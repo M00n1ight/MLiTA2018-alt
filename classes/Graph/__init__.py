@@ -52,6 +52,10 @@ class Graph:
 
         search(node_from)
         # print(min_length)
+        # for i in ways:
+        #     for j in i:
+        #         print(j)
+        #     print()
         return ways, min_length
 
     # Поиск по тэгам
