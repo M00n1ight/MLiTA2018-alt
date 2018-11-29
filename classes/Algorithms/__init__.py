@@ -92,9 +92,11 @@ def dijkstra_way(graph, node_from, node_to):
 
     # Инициализируем расстояния
     dists = {a: -1 for a in graph.nodes}
-    # Init edges that leads to a node
-    edges = dict()
     dists[node_from] = 0
+    # Init edges that leads to a node
+    edges_to = dict()
+    edges_to.update({node_from: []})
+    # Init queue for BFS
     queue = list()
     queue.append(node_from)
 
@@ -125,30 +127,69 @@ def dijkstra_way(graph, node_from, node_to):
             if dists[x.n_to] == -1:
                 queue.append(x.n_to)
                 dists[x.n_to] = dists[current_node] + x.get_weight()
-                edges.update({x.n_to: [x]})
+                edges_to.update({x.n_to: [x]})
             # if we have been to node, but got a new smaller distance
             elif dists[x.n_to] > x.get_weight() + dists[current_node]:
                 dists[x.n_to] = x.get_weight() + dists[current_node]
-                edges[x.n_to] = [x]
+                edges_to[x.n_to] = [x]
             # if we have been to node, and got another way to get to this node with the smallest dist
             elif dists[x.n_to] >= x.get_weight() + dists[current_node]:
-                edges[x.n_to].append(x)
+                edges_to[x.n_to].append(x)
 
     # Итоговое расстояние и переменная для путей (might be more than one)
     length = dists[node_to]
-    ways = []
 
     # Если добраться невозможно
     if length == -1:
         return -1, []
 
     # Если добраться возможно, то ищем путь
-    
+    found = False
+    way = list()
+    way.append(node_to)
+    current_node = node_to
+    while not found:
+        current_node = edges_to[current_node][0].n_from
+        way.insert(0, current_node)
+        if current_node == node_from:
+            found = True
 
-    return dists, ways
+    # Or searching for all paths
+    paths = list()
+    path = []
+    paths.append(path)
+    path_n = 0
+    stacks = list()
+    stack = [node_to]
+    stacks.append(stack)
+    count = 0
+    while stacks:
+        current_node = stacks[0].pop()
+        paths[path_n].append(current_node)
+        amount_of_ways_from = len(edges_to[current_node])
+        if amount_of_ways_from > 0:
+            for i in range(amount_of_ways_from - 1):
+                copy = stacks[0].copy()
+                copy.append(edges_to[current_node][i + 1].n_from)
+                stacks.append(copy)
+                copy = paths[path_n].copy()
+                # copy.append(edges_to[current_node][i + 1].n_from)
+                paths.append(copy)
+
+            stacks[0].append(edges_to[current_node][0].n_from)
+
+        else:
+            stacks.pop(0)
+            path_n += 1
+            count += 1
+
+    for i in range(count):
+        paths[i] = paths[i][::-1]
+
+    return dists, paths
 
 
 # Dijkstra по тэгам
 def dijkstra_way_by_tags(graph, node_from, node_to_):
     f, t = graph._get_node_by_tag(node_from), graph._get_node_by_tag(node_to_)
-    return dijkstra_way(graph, f, t)
+    return dijkstra_way(graph, f, t), f, t
