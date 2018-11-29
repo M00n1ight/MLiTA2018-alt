@@ -1,4 +1,4 @@
-import classes.Graph
+import classes
 
 
 # Перебор
@@ -60,31 +60,92 @@ def brute_force_by_tag(graph, tag_from, tag_to):
 
 # Dijkstra
 def dijkstra_way(graph, node_from, node_to):
-    d = [-1 for x in graph.get_nodes()]
-    d[node_from.id] = 0
+    if not isinstance(graph, classes.Graph.Graph):
+        raise IOError("Wrong graph type")
+    if not isinstance(node_from, classes.Node.Node):
+        raise IOError("Wrong node_from type")
+    if not isinstance(node_to, classes.Node.Node):
+        raise IOError("Wrong node_to type")
+
+    # Дейкстра массивом--------------------------------------------
+    # # d - массив наикротчайших расстояний до точек (-1 типо бесконечность)
+    # d = [-1 for x in graph.get_nodes()]
+    # d[node_from.id] = 0
+    # queue = list()
+    # queue.append(node_from)
+    # done_nodes = list()
+    #
+    # # Находим рассточяния до точек
+    # while queue:
+    #     current_node = queue.pop(0)
+    #     done_nodes.append(current_node)
+    #     next_edges = graph._get_all_edges_from(current_node)
+    #     for x in next_edges:
+    #         if x.n_to not in done_nodes:
+    #             queue.append(x.n_to)
+    #         if d[x.n_to.id] > x.get_weight() + d[x.n_from.id] or d[x.n_to.id] == -1:
+    #             d[x.n_to.id] = x.get_weight() + d[x.n_from.id]
+    #
+    # # Поиск пути (путей)
+    # length = d[node_to.id]
+    # Конец Дейкстры массивом--------------------------------------
+
+    # Инициализируем расстояния
+    dists = {a: -1 for a in graph.nodes}
+    # Init edges that leads to a node
+    edges = dict()
+    dists[node_from] = 0
     queue = list()
     queue.append(node_from)
-    done_nodes = list()
 
-    # Находим рассточяния до точек
+    # Ищем расстояния до точек
     while queue:
-        current_node = queue.pop(0)
-        done_nodes.append(current_node)
+
+        # Поиск минимального (по расстоянию) элемента
+        minimum = -1
+        current_node = None
+        for i in queue:
+            if minimum == -1 or dists[i] <= minimum:
+                current_node = i
+                minimum = dists[i]
+
+        # Считаем пути до следующих вершин
         next_edges = graph._get_all_edges_from(current_node)
+        queue.remove(current_node)
         for x in next_edges:
-            if x.n_to not in done_nodes:
+
+            # Refresh list of edges the leads to x.n_to
+            # if x.n_to in edges:
+            #     edges[x.n_to].append(x)
+            # else:
+            #     edges.update({x.n_to: [x]})
+
+            # Refresh distances
+            # if we haven't been to node
+            if dists[x.n_to] == -1:
                 queue.append(x.n_to)
-            if d[x.n_to.id] > x.get_weight() + d[x.n_from.id] or d[x.n_to.id] == -1:
-                d[x.n_to.id] = x.get_weight() + d[x.n_from.id]
+                dists[x.n_to] = dists[current_node] + x.get_weight()
+                edges.update({x.n_to: [x]})
+            # if we have been to node, but got a new smaller distance
+            elif dists[x.n_to] > x.get_weight() + dists[current_node]:
+                dists[x.n_to] = x.get_weight() + dists[current_node]
+                edges[x.n_to] = [x]
+            # if we have been to node, and got another way to get to this node with the smallest dist
+            elif dists[x.n_to] >= x.get_weight() + dists[current_node]:
+                edges[x.n_to].append(x)
 
-    # Поиск пути (путей)
-    length = d[node_to.id]
+    # Итоговое расстояние и переменная для путей (might be more than one)
+    length = dists[node_to]
+    ways = []
 
+    # Если добраться невозможно
     if length == -1:
-        return 0
+        return -1, []
 
-    # Надо найти путь
-    return d, done_nodes
+    # Если добраться возможно, то ищем путь
+    
+
+    return dists, ways
 
 
 # Dijkstra по тэгам
