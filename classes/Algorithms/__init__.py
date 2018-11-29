@@ -45,11 +45,6 @@ def brute_force(graph, node_from, node_to_):
             way.pop()
 
     search(node_from)
-    # print(min_length)
-    # for i in ways:
-    #     for j in i:
-    #         print(j)
-    #     print()
     return ways, min_length
 
 
@@ -66,29 +61,6 @@ def dijkstra_way(graph, node_from, node_to):
         raise IOError("Wrong node_from type")
     if not isinstance(node_to, classes.Node.Node):
         raise IOError("Wrong node_to type")
-
-    # Дейкстра массивом--------------------------------------------
-    # # d - массив наикротчайших расстояний до точек (-1 типо бесконечность)
-    # d = [-1 for x in graph.get_nodes()]
-    # d[node_from.id] = 0
-    # queue = list()
-    # queue.append(node_from)
-    # done_nodes = list()
-    #
-    # # Находим рассточяния до точек
-    # while queue:
-    #     current_node = queue.pop(0)
-    #     done_nodes.append(current_node)
-    #     next_edges = graph._get_all_edges_from(current_node)
-    #     for x in next_edges:
-    #         if x.n_to not in done_nodes:
-    #             queue.append(x.n_to)
-    #         if d[x.n_to.id] > x.get_weight() + d[x.n_from.id] or d[x.n_to.id] == -1:
-    #             d[x.n_to.id] = x.get_weight() + d[x.n_from.id]
-    #
-    # # Поиск пути (путей)
-    # length = d[node_to.id]
-    # Конец Дейкстры массивом--------------------------------------
 
     # Инициализируем расстояния
     dists = {a: -1 for a in graph.nodes}
@@ -115,13 +87,6 @@ def dijkstra_way(graph, node_from, node_to):
         next_edges = graph._get_all_edges_from(current_node)
         queue.remove(current_node)
         for x in next_edges:
-
-            # Refresh list of edges the leads to x.n_to
-            # if x.n_to in edges:
-            #     edges[x.n_to].append(x)
-            # else:
-            #     edges.update({x.n_to: [x]})
-
             # Refresh distances
             # if we haven't been to node
             if dists[x.n_to] == -1:
