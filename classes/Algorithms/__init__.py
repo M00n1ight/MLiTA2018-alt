@@ -108,18 +108,7 @@ def dijkstra_way(graph, node_from, node_to):
     if length == -1:
         return -1, []
 
-    # Если добраться возможно, то ищем путь
-    found = False
-    way = list()
-    way.append(node_to)
-    current_node = node_to
-    while not found:
-        current_node = edges_to[current_node][0].n_from
-        way.insert(0, current_node)
-        if current_node == node_from:
-            found = True
-
-    # Or searching for all paths
+    # Searching for all paths
     paths = list()
     path = []
     paths.append(path)
