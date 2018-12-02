@@ -93,11 +93,11 @@ def dijkstra_way(graph, node_from, node_to):
                 queue.append(x.n_to)
                 dists[x.n_to] = dists[current_node] + x.get_weight()
                 edges_to.update({x.n_to: [x]})
-            # if we have been to node, but got a new smaller distance
+            # if we have been to node, but got a new less distance
             elif dists[x.n_to] > x.get_weight() + dists[current_node]:
                 dists[x.n_to] = x.get_weight() + dists[current_node]
                 edges_to[x.n_to] = [x]
-            # if we have been to node, and got another way to get to this node with the smallest dist
+            # if we have been to node, and got another way to get to this node with the less dist
             elif dists[x.n_to] >= x.get_weight() + dists[current_node]:
                 edges_to[x.n_to].append(x)
 
