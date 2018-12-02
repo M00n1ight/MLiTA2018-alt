@@ -6,12 +6,15 @@ class Graph:
     def __init__(self, nodes=None, edges=None):
         self.nodes = nodes
         self.edges = edges
+        if nodes is not None and edges is not None:
+            self.normalize()
 
-        for i in self.nodes:
-            for j in self.edges:
-                if j.n_from == i or j.n_to == i:
-                    i.incidentEdges.append(j)
-
+    def normalize(self):
+        if self.nodes is not None and self.edges is not None:
+            for i in self.nodes:
+                for j in self.edges:
+                    if j.n_from == i or j.n_to == i:
+                        i.incidentEdges.append(j)
 
     # Вспомогательные паблик методы
     def read_graph_as_matrix(self, filename):
@@ -36,6 +39,7 @@ class Graph:
                     for w in range(amount):
                         self.nodes.append(Node.Node(tag))
                         tag = chr(ord(tag) + 1)
+        self.normalize()
         pass
 
     def out_graph_as_matrix(self):

@@ -13,7 +13,7 @@ def brute_force(graph, node_from, node_to_):
     def search(curr_node):
         nonlocal current_length, min_length
         nonlocal way, depth, node_to_, ways
-        next_ways = graph._get_all_edges_from(curr_node)
+        next_ways = curr_node.incidentEdges
         for i in next_ways:
 
             # Если уже проходили вершину
