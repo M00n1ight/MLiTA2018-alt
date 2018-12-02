@@ -7,6 +7,7 @@ class Node:
         self.x = x
         self.y = y
         self.id = Node.id_
+        self.incidentEdges = list()
         Node.id_ += 1
 
     def __str__(self):
