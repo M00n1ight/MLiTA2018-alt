@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Graph</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/js-client/init.js"></script>
+</head>
+<body>
+    <div class="button" id="startButton">START</div>
+    <canvas id="canvas" style="border: 1px solid black" hidden="hidden"></canvas>
+    <div hidden="hidden" class="zoom_button" style="top: 10px">+</div>
+    <div hidden="hidden" class="zoom_button" style="top:40px">-</div>
+
+    <script src="/js-client/buttonAjax.js"></script>
+    <script src="/js-client/graph-shader-compiler.js"></script>
+    <script src="/js-client/canvas-full-screen.js"></script>
+    <script src="/js-client/graph-events.js"></script>
+    <script id="2d-vertex-shader" type="notjs">
+        attribute vec2 a_position;
+
+        uniform vec2 u_resolution;
+        uniform vec2 u_minLonLat;
+        uniform vec2 u_maxLonLat;
+
+        uniform vec2 u_offset;
+        uniform vec2 u_scale;
+
+        void main(){
+            vec2 xy = u_scale * ((a_position - u_minLonLat) / (u_maxLonLat - u_minLonLat) * 2.0 - 1.0);
+            xy += u_offset * vec2(1,-1) / u_resolution;
+            gl_Position = vec4(xy, 0, 1);
+        }
+    </script>
+    <script id="2d-fragment-shader" type =notjs>
+        precision mediump float;
+
+        uniform vec4 u_colors;
+
+        void main(){
+            gl_FragColor = u_colors;
+        }
+    </script>
+    <!--<script src="/js-client/test-shader-compiler.js"></script>-->
+</body>
+</html>

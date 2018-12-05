@@ -1,0 +1,17 @@
+{
+  "name": "alt_mlita",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "md3sIam",
+  "license": "ISC",
+  "dependencies": {
+    "JSONStream": "^1.3.5",
+    "event-stream": "^4.0.1",
+    "express": "^4.16.4",
+    "ngraph.graph": "0.0.14"
+  }
+}
