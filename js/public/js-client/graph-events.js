@@ -6,10 +6,14 @@ let mouseStartX = undefined;
 let mouseStartY = undefined;
 
 let isMouseMoved = false;
+let isAbleToPoint = true;
 let currentOffsetx = 0;
 let currentOffsety = 0;
 let moveOffsetx = 0;
 let moveOffsety = 0;
+
+let pointFrom = undefined;
+let pointTo = undefined;
 
 canvas.addEventListener('mousedown', function(event){
     if (!isMouseDown && isGraphDrawn){
@@ -32,6 +36,7 @@ canvas.addEventListener('mouseup', function(event){
 canvas.addEventListener('mousemove', function(event){
     if (isMouseDown && isGraphDrawn){
         isMouseMoved = true;
+        isAbleToPoint = false;
         moveOffsetx = 2*(event.offsetX - mouseStartX);
         moveOffsety = 2*(event.offsetY - mouseStartY);
         reDrawGraph(graph,
@@ -60,3 +65,17 @@ for (let i = 0; i < zoom.length; i++){
         reDrawGraph(graph, currentOffsetx, currentOffsety, scale)
     })
 }
+
+canvas.addEventListener('click', function(event){
+    if (isGraphDrawn && isAbleToPoint){
+        if (pointFrom === undefined){
+            pointFrom = {x: event.offsetX, y: canvas.height - event.offsetY};
+            console.log(`pointFrom set to ${pointFrom.x}:${pointFrom.y}`);
+        }
+        else {
+            pointTo = {x: event.offsetX, y: canvas.height - event.offsetY};
+            console.log(`pointTo set to ${pointTo.x}:${pointTo.y}`);
+        }
+    }
+    isAbleToPoint = true;
+});
