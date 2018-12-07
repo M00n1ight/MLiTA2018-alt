@@ -15,6 +15,9 @@ let moveOffsety = 0;
 let pointFrom = undefined;
 let pointTo = undefined;
 
+let svgPrevOffsetx = 0;
+let svgPrevOffsety = 0;
+
 canvas.addEventListener('mousedown', function(event){
     if (!isMouseDown && isGraphDrawn){
         isMouseDown = true;
@@ -28,8 +31,10 @@ canvas.addEventListener('mouseup', function(event){
     isMouseDown = false;
     if (isMouseMoved){
         isMouseMoved = false;
-        currentOffsetx = (currentOffsetx + moveOffsetx);
-        currentOffsety = (currentOffsety + moveOffsety);
+        currentOffsetx = (currentOffsetx + 2 * moveOffsetx);
+        currentOffsety = (currentOffsety + 2 * moveOffsety);
+        svgPrevOffsetx = 0;
+        svgPrevOffsety = 0;
     }
 });
 
@@ -37,10 +42,34 @@ canvas.addEventListener('mousemove', function(event){
     if (isMouseDown && isGraphDrawn){
         isMouseMoved = true;
         isAbleToPoint = false;
-        moveOffsetx = 2*(event.offsetX - mouseStartX);
-        moveOffsety = 2*(event.offsetY - mouseStartY);
+        moveOffsetx = (event.offsetX - mouseStartX);
+        moveOffsety = (event.offsetY - mouseStartY);
+
+        if (pointFrom){
+            pointFrom = shiftSvg(pointFrom);
+        }
+
+        if (pointTo){
+            pointTo = shiftSvg(pointTo);
+        }
+
+
+        svgPrevOffsetx = moveOffsetx;
+        svgPrevOffsety = moveOffsety;
+
         reDrawGraph(graph,
-            (currentOffsetx + moveOffsetx), (currentOffsety + moveOffsety), scale);
+            (currentOffsetx + 2 * moveOffsetx), (currentOffsety + 2 * moveOffsety), scale);
+
+        reDrawSvg();
+    }
+
+
+    function shiftSvg(point){
+        let result = {};
+        let clickPoint = fromShaderXYToClickTY(point.x, point.y);
+        result.x = clickPoint.x + (- svgPrevOffsetx + moveOffsetx);
+        result.y = clickPoint.y + (- svgPrevOffsety + moveOffsety);
+        return fromClickXYToShaderXY(result.x, result.y);
     }
 });
 
@@ -55,27 +84,67 @@ for (let i = 0; i < zoom.length; i++){
             scale *= scaleSpeed;
             currentOffsetx *= scaleSpeed;
             currentOffsety *= scaleSpeed;
+            if (pointFrom){
+                pointFrom.x *= scaleSpeed;
+                pointFrom.y *= scaleSpeed;
+            }
+            if (pointTo){
+                pointTo.x *= scaleSpeed;
+                pointTo.y *= scaleSpeed
+            }
         }
         else if (inner === '-') {
             scale /= scaleSpeed;
             currentOffsetx /= scaleSpeed;
             currentOffsety /= scaleSpeed;
+            if (pointFrom){
+                pointFrom.x /= scaleSpeed;
+                pointFrom.y /= scaleSpeed;
+            }
+            if (pointTo){
+                pointTo.x /= scaleSpeed;
+                pointTo.y /= scaleSpeed;
+            }
         }
-        console.log(scale);
-        reDrawGraph(graph, currentOffsetx, currentOffsety, scale)
+        else if (inner === 'Clear points'){
+            pointFrom = undefined;
+            pointTo = undefined;
+            if (circleFrom){
+                circleFrom.setAttribute('cx', -10000);
+                circleFrom.setAttribute('cy', -10000);
+                textA.setAttribute('x', -10000);
+                textA.setAttribute('y', -10000);
+            }
+            if (circleTo){
+                circleTo.setAttribute('cx', -10000);
+                circleTo.setAttribute('cy', -10000);
+                textB.setAttribute('x', -10000);
+                textB.setAttribute('y', -10000)
+            }
+        }
+        console.log('Current scale: ' + scale);
+        reDrawGraph(graph, currentOffsetx, currentOffsety, scale);
+        reDrawSvg();
     })
 }
 
 canvas.addEventListener('click', function(event){
+    //TEST
+    // let result = fromClickXYToShaderXY(event.offsetX, event.offsetY);
+    // console.log(`TEST 1 RESULT\n${event.offsetX} : ${event.offsetY} -> ${result.x} : ${result.y}`);
+    // let result1 = fromShaderXYToClickTY(result.x, result.y);
+    // console.log(`TEST 2 RESULT\n${result.x} : ${result.y} -> ${result1.x} : ${result1.y}`);
+    //END TEST
     if (isGraphDrawn && isAbleToPoint){
         if (pointFrom === undefined){
-            pointFrom = {x: event.offsetX, y: canvas.height - event.offsetY};
+            pointFrom = fromClickXYToShaderXY(event.offsetX, event.offsetY);
             console.log(`pointFrom set to ${pointFrom.x}:${pointFrom.y}`);
         }
         else {
-            pointTo = {x: event.offsetX, y: canvas.height - event.offsetY};
+            pointTo = fromClickXYToShaderXY(event.offsetX, event.offsetY);
             console.log(`pointTo set to ${pointTo.x}:${pointTo.y}`);
         }
     }
+    reDrawSvg();
     isAbleToPoint = true;
 });

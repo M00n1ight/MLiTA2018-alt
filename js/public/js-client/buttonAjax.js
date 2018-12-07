@@ -10,7 +10,7 @@ buttonStart.onclick = function(){
     let zoomButtons = document.getElementsByClassName('zoom_button');
 
     cnv.hidden = false;
-    makeCanvasFS();
+    resizeCanvasFS();
     buttonStart.hidden = true;
 
     for(let i = 0; i < zoomButtons.length; i++){
