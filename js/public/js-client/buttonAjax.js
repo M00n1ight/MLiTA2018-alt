@@ -13,14 +13,14 @@ buttonStart.onclick = function(){
     resizeCanvasFS();
     buttonStart.hidden = true;
 
-    for(let i = 0; i < zoomButtons.length; i++){
-        zoomButtons[i].hidden = false;
-    }
-
     $.ajax({
         url: '/ajax/getGraph',
         success: function(g){
             console.log('AJAX SUCCEED');
+
+            for(let i = 0; i < zoomButtons.length; i++){
+                zoomButtons[i].hidden = false;
+            }
 
             reDrawGraph(g, 0, 0, 1);
 

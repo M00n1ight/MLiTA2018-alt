@@ -136,7 +136,89 @@ buttonClearPoints.addEventListener('click', function(event){
 
 let buttonFindNodes = document.getElementById('find_nodes');
 buttonFindNodes.addEventListener('click', function(event){
+    console.log('START SEARCH');
+    //SEARCH VARIABLES
+    let minSqFrom = 1000000;
+    let minSqTo = 1000000;
+    let from, to;
+    let deltaLon = graph.maxLon - graph.minLon;
+    let deltaLat = graph.maxLat - graph.minLat;
 
+    //CALCULATION VARIABLES
+    let scaledOffsetx = currentOffsetx / canvas.width;
+    let scaledOffsety = currentOffsety / canvas.height;
+    let scaledelta2lon = scale / deltaLon * 2;
+    let scaledelta2lat = scale / deltaLat * 2;
+
+    //SEARCH
+    for (let i = 0; i < graph.edgesAmount; i++){
+        if ((i+1) % 1000 === 0)
+            console.log('1000 iteration');
+        //FIRSTLY DO FOR NODE FROM OF EDGE
+        //TRANSLATE DEFAULT COORDS TO CURRENT MAP STATE
+        let cLonLat = {
+            lon: scaledelta2lon *
+                (graph[i].from.lon - graph.minLon) - scale + scaledOffsetx,
+            lat: scaledelta2lat *
+                (graph[i].from.lat - graph.minLat) - scale - scaledOffsety,
+        };
+
+        //CALCULATE DISTANCE FROM 'FROM' AND 'TO'
+        let distanceFrom =
+            Math.pow(cLonLat.lon - pointFrom.x, 2) + Math.pow(cLonLat.lat - pointFrom.y, 2);
+        let distanceTo =
+            Math.pow(cLonLat.lon - pointTo.x, 2) + Math.pow(cLonLat.lat - pointTo.y, 2);
+
+        //COMPARE DISTANCES
+        if (distanceFrom < minSqFrom){
+            minSqFrom = distanceFrom;
+            from = graph[i].from;
+        }
+
+        if (distanceTo < minSqTo){
+            minSqTo = distanceFrom;
+            to = graph[i].from;
+        }
+
+        //THEN DO FOR NODE TO OF EDGE
+        //TRANSLATE DEFAULT COORDS TO CURRENT MAP STATE
+        cLonLat = {
+            lon: scaledelta2lon *
+                (graph[i].to.lon - graph.minLon) - 1 + scaledOffsetx,
+            lat: scaledelta2lat *
+                (graph[i].to.lat - graph.minLat) - 1 - scaledOffsety,
+        };
+
+        //CALCULATE DISTANCE FROM 'FROM' AND 'TO'
+        distanceFrom =
+            Math.pow(cLonLat.lon - pointFrom.x, 2) + Math.pow(cLonLat.lat - pointFrom.y, 2);
+        distanceTo =
+            Math.pow(cLonLat.lon - pointTo.x, 2) + Math.pow(cLonLat.lat - pointTo.y, 2);
+
+        //COMPARE DISTANCES
+        if (distanceFrom < minSqFrom){
+            minSqFrom = distanceFrom;
+            from = graph[i].to;
+        }
+
+        if (distanceTo < minSqTo){
+            minSqTo = distanceFrom;
+            to = graph[i].to;
+        }
+    }
+    console.log('SEARCH END');
+    console.log(`FROM:\n lon ${from.lon}\n lat ${from.lat}`);
+    console.log(`TO:\n lon ${to.lon}\n lat ${to.lat}`);
+
+    //TEST VISUALIZATION
+    /*let shaderC = fromDegToShaderXY(from.lon, from.lat);
+    let clickC = fromShaderXYToClickTY(shaderC.x, shaderC.y);
+    let testCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    testCircle.setAttribute('r', 4);
+    testCircle.setAttribute('fill', 'green');
+    testCircle.setAttribute('cx', clickC.x);
+    testCircle.setAttribute('cy', clickC.y);
+    svg.appendChild(testCircle);*/
 });
 
 let buttonFindPath = document.getElementById('find_path');
