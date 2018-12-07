@@ -76,65 +76,75 @@ canvas.addEventListener('mousemove', function(event){
 //SCALING
 let scale = 1;
 let scaleSpeed = 1.5;
-let zoom = document.getElementsByClassName('zoom_button');
-for (let i = 0; i < zoom.length; i++){
-    zoom[i].addEventListener('click', function(event){
-        let inner = zoom[i].innerHTML;
-        if (inner === '+') {
-            scale *= scaleSpeed;
-            currentOffsetx *= scaleSpeed;
-            currentOffsety *= scaleSpeed;
-            if (pointFrom){
-                pointFrom.x *= scaleSpeed;
-                pointFrom.y *= scaleSpeed;
-            }
-            if (pointTo){
-                pointTo.x *= scaleSpeed;
-                pointTo.y *= scaleSpeed
-            }
-        }
-        else if (inner === '-') {
-            scale /= scaleSpeed;
-            currentOffsetx /= scaleSpeed;
-            currentOffsety /= scaleSpeed;
-            if (pointFrom){
-                pointFrom.x /= scaleSpeed;
-                pointFrom.y /= scaleSpeed;
-            }
-            if (pointTo){
-                pointTo.x /= scaleSpeed;
-                pointTo.y /= scaleSpeed;
-            }
-        }
-        else if (inner === 'Clear points'){
-            pointFrom = undefined;
-            pointTo = undefined;
-            if (circleFrom){
-                circleFrom.setAttribute('cx', -10000);
-                circleFrom.setAttribute('cy', -10000);
-                textA.setAttribute('x', -10000);
-                textA.setAttribute('y', -10000);
-            }
-            if (circleTo){
-                circleTo.setAttribute('cx', -10000);
-                circleTo.setAttribute('cy', -10000);
-                textB.setAttribute('x', -10000);
-                textB.setAttribute('y', -10000)
-            }
-        }
-        console.log('Current scale: ' + scale);
-        reDrawGraph(graph, currentOffsetx, currentOffsety, scale);
-        reDrawSvg();
-    })
-}
+
+
+let buttonScale = document.getElementById('scale');
+buttonScale.addEventListener('click', function(event){
+    scale *= scaleSpeed;
+    currentOffsetx *= scaleSpeed;
+    currentOffsety *= scaleSpeed;
+    if (pointFrom){
+        pointFrom.x *= scaleSpeed;
+        pointFrom.y *= scaleSpeed;
+    }
+    if (pointTo){
+        pointTo.x *= scaleSpeed;
+        pointTo.y *= scaleSpeed
+    }
+    console.log('Current scale: ' + scale);
+    reDrawGraph(graph, currentOffsetx, currentOffsety, scale);
+    reDrawSvg();
+});
+
+let buttonUnscale = document.getElementById('unscale');
+buttonUnscale.addEventListener('click', function(event){
+    scale /= scaleSpeed;
+    currentOffsetx /= scaleSpeed;
+    currentOffsety /= scaleSpeed;
+    if (pointFrom){
+        pointFrom.x /= scaleSpeed;
+        pointFrom.y /= scaleSpeed;
+    }
+    if (pointTo){
+        pointTo.x /= scaleSpeed;
+        pointTo.y /= scaleSpeed;
+    }
+    console.log('Current scale: ' + scale);
+    reDrawGraph(graph, currentOffsetx, currentOffsety, scale);
+    reDrawSvg();
+});
+
+let buttonClearPoints = document.getElementById('clear_points');
+buttonClearPoints.addEventListener('click', function(event){
+    pointFrom = undefined;
+    pointTo = undefined;
+    if (circleFrom){
+        circleFrom.setAttribute('cx', -10000);
+        circleFrom.setAttribute('cy', -10000);
+        textA.setAttribute('x', -10000);
+        textA.setAttribute('y', -10000);
+    }
+    if (circleTo){
+        circleTo.setAttribute('cx', -10000);
+        circleTo.setAttribute('cy', -10000);
+        textB.setAttribute('x', -10000);
+        textB.setAttribute('y', -10000)
+    }
+    reDrawGraph(graph, currentOffsetx, currentOffsety, scale);
+    reDrawSvg();
+});
+
+let buttonFindNodes = document.getElementById('find_nodes');
+buttonFindNodes.addEventListener('click', function(event){
+
+});
+
+let buttonFindPath = document.getElementById('find_path');
+buttonFindPath.addEventListener('click', function(event){
+
+});
 
 canvas.addEventListener('click', function(event){
-    //TEST
-    // let result = fromClickXYToShaderXY(event.offsetX, event.offsetY);
-    // console.log(`TEST 1 RESULT\n${event.offsetX} : ${event.offsetY} -> ${result.x} : ${result.y}`);
-    // let result1 = fromShaderXYToClickTY(result.x, result.y);
-    // console.log(`TEST 2 RESULT\n${result.x} : ${result.y} -> ${result1.x} : ${result1.y}`);
-    //END TEST
     if (isGraphDrawn && isAbleToPoint){
         if (pointFrom === undefined){
             pointFrom = fromClickXYToShaderXY(event.offsetX, event.offsetY);
