@@ -18,6 +18,8 @@ let pointTo = undefined;
 let svgPrevOffsetx = 0;
 let svgPrevOffsety = 0;
 
+let from, to;
+
 canvas.addEventListener('mousedown', function(event){
     if (!isMouseDown && isGraphDrawn){
         isMouseDown = true;
@@ -140,7 +142,6 @@ buttonFindNodes.addEventListener('click', function(event){
     //SEARCH VARIABLES
     let minSqFrom = 1000000;
     let minSqTo = 1000000;
-    let from, to;
     let deltaLon = graph.maxLon - graph.minLon;
     let deltaLat = graph.maxLat - graph.minLat;
 
@@ -223,7 +224,17 @@ buttonFindNodes.addEventListener('click', function(event){
 
 let buttonFindPath = document.getElementById('find_path');
 buttonFindPath.addEventListener('click', function(event){
-
+    if (from && to) {
+        console.log(from, to);
+        $.ajax({
+            url: `/ajax/calculatePath?fromLon=${from.lon}&fromLat=${from.lat}&toLon=${to.lon}&toLat=${to.lat}`,
+            success: function (data) {
+                console.log("DATA FETCH");
+                console.log(data);
+                console.log("END DATA FETCH");
+            }
+        })
+    }
 });
 
 canvas.addEventListener('click', function(event){

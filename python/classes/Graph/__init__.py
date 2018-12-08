@@ -1,4 +1,5 @@
 from classes import Edge, Node
+import pandas as pd
 
 
 class Graph:
@@ -11,10 +12,21 @@ class Graph:
 
     def normalize(self):
         if self.nodes is not None and self.edges is not None:
-            for i in self.nodes:
-                for j in self.edges:
-                    if j.n_from == i or j.n_to == i:
-                        i.incidentEdges.append(j)
+            counter = 0
+            for i in self.edges:
+                counter += 1
+                print(counter)
+                i.n_from.incidentEdges.append(i)
+                i.n_to.incedentEdges.append(i)
+
+    def read_graph_from_csv(self, file_name_nodes, file_name_roads):
+        self.nodes, self.edges = dict(), list()
+        self.__read_nodes(pd.read_csv('maps/' + file_name_nodes))
+        print('nodes done')
+        self.__read_roads(pd.read_csv('maps/' + file_name_roads))
+        print('edges done')
+        # self.normalize()
+        print('norm done')
 
     # Вспомогательные паблик методы
     def read_graph_as_matrix(self, filename):
@@ -68,6 +80,12 @@ class Graph:
                 return i
         return 0
 
+    def _get_node_by_id(self, id_):
+        for i in self.nodes:
+            if i.id == id_:
+                return 1
+        return 0
+
     def _get_all_edges_from(self, node_from):
         result = []
         for i in self.edges:
@@ -80,3 +98,19 @@ class Graph:
             if i.n_from == node1 and i.n_to == node2:
                 return i.get_weight()
         return 0
+
+    def __read_nodes(self, nodes):
+        for (ind, row) in nodes.iterrows():
+            self.nodes[row.id] = Node.Node(id_=row.id, x=row.lat, y=row.lon)
+
+    def __read_roads(self, roads):
+        counter = 1
+        for (ind, row) in roads.iterrows():
+            if (counter % 100 == 0):
+                print(counter)
+            counter += 1
+            self.edges.append(Edge.Edge(
+                self.nodes[row.fromId],
+                self.nodes[row.toId],
+                row.weight
+            ))

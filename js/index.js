@@ -16,6 +16,20 @@ app.get('/ajax/getGraph', function(req,res){
     require('./extract-roads-master/parser')(res);
 });
 
+app.get('/ajax/calculatePath', function(req, res){
+    delete require.cache[require.resolve('./send-points-to-get-path/main')];
+    let points = {};
+    points.from = {
+        lon: req.query.fromLon,
+        lat: req.query.fromLat
+    };
+    points.to = {
+        lon: req.query.toLon,
+        lat: req.query.toLat
+    };
+    require('./send-points-to-get-path/main')(res, points);
+});
+
 app.get('/upload', (req, res) => {
     console.log('upload started');
     require('./extract-roads-master/parser')(res);

@@ -1,16 +1,12 @@
 class Node:
 
-    id_ = 0
-
-    def __init__(self, tag, x=None, y=None):
-        self.tag = tag
+    def __init__(self, id_=None, x=None, y=None):
+        self.id = id_
         self.x = x
         self.y = y
-        self.id = Node.id_
         self.incidentEdges = list()
-        Node.id_ += 1
 
     def __str__(self):
-        return self.tag
+        return self.id
 
     pass
