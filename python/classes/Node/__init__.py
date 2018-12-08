@@ -7,6 +7,6 @@ class Node:
         self.incidentEdges = list()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     pass
