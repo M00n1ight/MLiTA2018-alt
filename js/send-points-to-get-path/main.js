@@ -14,15 +14,22 @@ module.exports = function(res, points){
 
     client.on('data', function(data){
         console.log('Received: ' + data);
+        client.destroy();
 
         let data_f = data.toString().split(' ');
         console.log(data_f.length);
+
         let path = [];
-        //for (let i = 0; i * 2 < data_f; )
 
+        for (let i = 0; i < data_f.length - 1; i += 2){
+            path.push({
+                x: Number(data_f[i]),
+                y: Number(data_f[i+1])
+            })
+        }
 
-        client.destroy();
+        console.log(path);
+
+        res.json(path);
     });
-
-    res.send('ajax done');
 };

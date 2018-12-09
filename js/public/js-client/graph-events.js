@@ -20,6 +20,8 @@ let svgPrevOffsety = 0;
 
 let from, to;
 
+let path = undefined;
+
 canvas.addEventListener('mousedown', function(event){
     if (!isMouseDown && isGraphDrawn){
         isMouseDown = true;
@@ -55,6 +57,11 @@ canvas.addEventListener('mousemove', function(event){
             pointTo = shiftSvg(pointTo);
         }
 
+        if (isPath){
+            for (let i = 0; i < path.length; i++){
+                path[i] = shiftSvg(path[i])
+            }
+        }
 
         svgPrevOffsetx = moveOffsetx;
         svgPrevOffsety = moveOffsety;
@@ -93,6 +100,13 @@ buttonScale.addEventListener('click', function(event){
         pointTo.x *= scaleSpeed;
         pointTo.y *= scaleSpeed
     }
+
+    if (isPath){
+        for (let i = 0; i < path.length; i++){
+            path[i].x *= scaleSpeed;
+            path[i].y *= scaleSpeed;
+        }
+    }
     console.log('Current scale: ' + scale);
     reDrawGraph(graph, currentOffsetx, currentOffsety, scale);
     reDrawSvg();
@@ -110,6 +124,12 @@ buttonUnscale.addEventListener('click', function(event){
     if (pointTo){
         pointTo.x /= scaleSpeed;
         pointTo.y /= scaleSpeed;
+    }
+    if (isPath){
+        for (let i = 0; i < path.length; i++){
+            path[i].x /= scaleSpeed;
+            path[i].y /= scaleSpeed;
+        }
     }
     console.log('Current scale: ' + scale);
     reDrawGraph(graph, currentOffsetx, currentOffsety, scale);
@@ -155,20 +175,15 @@ buttonFindNodes.addEventListener('click', function(event){
     for (let i = 0; i < graph.edgesAmount; i++){
         if ((i+1) % 1000 === 0)
             console.log('1000 iteration');
+
         //FIRSTLY DO FOR NODE FROM OF EDGE
-        //TRANSLATE DEFAULT COORDS TO CURRENT MAP STATE
-        let cLonLat = {
-            lon: scaledelta2lon *
-                (graph[i].from.lon - graph.minLon) - scale + scaledOffsetx,
-            lat: scaledelta2lat *
-                (graph[i].from.lat - graph.minLat) - scale - scaledOffsety,
-        };
+        let cLonLat = fromDegToShaderXY(graph[i].from.lon, graph[i].from.lat);
 
         //CALCULATE DISTANCE FROM 'FROM' AND 'TO'
         let distanceFrom =
-            Math.pow(cLonLat.lon - pointFrom.x, 2) + Math.pow(cLonLat.lat - pointFrom.y, 2);
+            Math.pow(cLonLat.x - pointFrom.x, 2) + Math.pow(cLonLat.y - pointFrom.y, 2);
         let distanceTo =
-            Math.pow(cLonLat.lon - pointTo.x, 2) + Math.pow(cLonLat.lat - pointTo.y, 2);
+            Math.pow(cLonLat.x - pointTo.x, 2) + Math.pow(cLonLat.y - pointTo.y, 2);
 
         //COMPARE DISTANCES
         if (distanceFrom < minSqFrom){
@@ -177,24 +192,19 @@ buttonFindNodes.addEventListener('click', function(event){
         }
 
         if (distanceTo < minSqTo){
-            minSqTo = distanceFrom;
+            minSqTo = distanceTo;
             to = graph[i].from;
         }
 
         //THEN DO FOR NODE TO OF EDGE
         //TRANSLATE DEFAULT COORDS TO CURRENT MAP STATE
-        cLonLat = {
-            lon: scaledelta2lon *
-                (graph[i].to.lon - graph.minLon) - 1 + scaledOffsetx,
-            lat: scaledelta2lat *
-                (graph[i].to.lat - graph.minLat) - 1 - scaledOffsety,
-        };
+        cLonLat = fromDegToShaderXY(graph[i].to.lon, graph[i].to.lat);
 
         //CALCULATE DISTANCE FROM 'FROM' AND 'TO'
         distanceFrom =
-            Math.pow(cLonLat.lon - pointFrom.x, 2) + Math.pow(cLonLat.lat - pointFrom.y, 2);
+            Math.pow(cLonLat.x - pointFrom.x, 2) + Math.pow(cLonLat.y - pointFrom.y, 2);
         distanceTo =
-            Math.pow(cLonLat.lon - pointTo.x, 2) + Math.pow(cLonLat.lat - pointTo.y, 2);
+            Math.pow(cLonLat.x - pointTo.x, 2) + Math.pow(cLonLat.y - pointTo.y, 2);
 
         //COMPARE DISTANCES
         if (distanceFrom < minSqFrom){
@@ -203,7 +213,7 @@ buttonFindNodes.addEventListener('click', function(event){
         }
 
         if (distanceTo < minSqTo){
-            minSqTo = distanceFrom;
+            minSqTo = distanceTo;
             to = graph[i].to;
         }
     }
@@ -215,7 +225,16 @@ buttonFindNodes.addEventListener('click', function(event){
     /*let shaderC = fromDegToShaderXY(from.lon, from.lat);
     let clickC = fromShaderXYToClickTY(shaderC.x, shaderC.y);
     let testCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-    testCircle.setAttribute('r', 4);
+    testCircle.setAttribute('r', 10);
+    testCircle.setAttribute('fill', 'yellow');
+    testCircle.setAttribute('cx', clickC.x);
+    testCircle.setAttribute('cy', clickC.y);
+    svg.appendChild(testCircle);
+
+    shaderC = fromDegToShaderXY(to.lon, to.lat);
+    clickC = fromShaderXYToClickTY(shaderC.x, shaderC.y);
+    testCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    testCircle.setAttribute('r', 10);
     testCircle.setAttribute('fill', 'green');
     testCircle.setAttribute('cx', clickC.x);
     testCircle.setAttribute('cy', clickC.y);
@@ -232,6 +251,21 @@ buttonFindPath.addEventListener('click', function(event){
                 console.log("DATA FETCH");
                 console.log(data);
                 console.log("END DATA FETCH");
+
+                if (data.length < 2){
+                    alert('No way found');
+                }
+
+                path = data.map(function(val, index,data){
+                    let xy = fromDegToShaderXY(val.x, val.y);
+                    return {
+                        x: xy.x,
+                        y: xy.y
+                    }
+                });
+
+                isPath = true;
+                reDrawSvg();
             }
         })
     }
