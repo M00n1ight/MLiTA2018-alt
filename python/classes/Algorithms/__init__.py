@@ -106,7 +106,7 @@ def dijkstra_way(graph, node_from, node_to):
 
     # Если добраться невозможно
     if length == -1:
-        return dists, []
+        return -1, []
 
     # Searching for all paths
     paths = list()
@@ -139,7 +139,7 @@ def dijkstra_way(graph, node_from, node_to):
     for i in range(count):
         paths[i] = paths[i][::-1]
 
-    return dists, paths
+    return dists[node_from.id], paths
 
 
 # Dijkstra по тэгам
@@ -151,5 +151,4 @@ def dijkstra_way_by_tags(graph, node_from, node_to_):
 def dijkstra_way_by_ids(graph, x1, y1, x2, y2):
     f = graph._get_node_by_xy(x1, y1)
     t = graph._get_node_by_xy(x2, y2)
-    print('START')
     return dijkstra_way(graph, f, t)
