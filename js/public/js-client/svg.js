@@ -67,7 +67,7 @@ function reDrawSvg(){
         //deleting old lines if exist
         if (oldLines.length !== 0) {
             for (let i = 0; i < oldLines.length; i++) {
-                oldLines[i].style.visibility = 'hidden';
+                //oldLines[i].style.visibility = 'hidden';
                 oldLines[i].remove();
             }
             oldLines = [];
@@ -103,6 +103,17 @@ function reDrawSvg(){
             l.setAttribute('stroke-width', '6');
             return l;
         }
+
+        circleFrom.remove();
+        svg.appendChild(circleFrom);
+        textA.remove();
+        svg.appendChild(textA);
+
+        circleTo.remove();
+        svg.appendChild(circleTo);
+        textB.remove();
+        svg.appendChild(textB);
+
     }
 
     function createSvgCircle(r, fill, s, sw){

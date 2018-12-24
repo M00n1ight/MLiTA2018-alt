@@ -1,4 +1,5 @@
 import classes
+import time
 
 
 # Перебор
@@ -62,6 +63,8 @@ def dijkstra_way(graph, node_from, node_to):
     if not isinstance(node_to, classes.Node.Node):
         raise IOError("Wrong node_to type")
 
+    time_start = time.time()
+
     # Инициализируем расстояния
     dists = {a: -1 for a in graph.nodes}
     dists[node_from.id] = 0
@@ -85,6 +88,7 @@ def dijkstra_way(graph, node_from, node_to):
 
         # Считаем пути до следующих вершин
         next_edges = [x for x in current_node.incidentEdges if x.n_from == current_node]
+        # next_edges = [x for x in current_node.incidentEdges]
         queue.remove(current_node)
         for x in next_edges:
             # Refresh distances
@@ -135,6 +139,10 @@ def dijkstra_way(graph, node_from, node_to):
             stacks.pop(0)
             path_n += 1
             count += 1
+
+    time_end = time.time()
+
+    print('Dijkstra done in {} sec'.format((time_end - time_start)*1000))
 
     for i in range(count):
         paths[i] = paths[i][::-1]

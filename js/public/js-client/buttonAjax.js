@@ -7,7 +7,11 @@ let graph = undefined;
 buttonStart.onclick = function(){
     console.log('BUTTON CLICKED');
     let cnv = document.getElementById('canvas');
-    let zoomButtons = document.getElementsByClassName('zoom_button');
+    let containerButtons = document.getElementById('container-buttons');
+    containerButtons.hidden = false;
+    // for(let i = 0; i < zoomButtons.length; i++){
+    //     zoomButtons[i].hidden = false;
+    // }
 
     cnv.hidden = false;
     resizeCanvasFS();
@@ -18,9 +22,9 @@ buttonStart.onclick = function(){
         success: function(g){
             console.log('AJAX SUCCEED');
 
-            for(let i = 0; i < zoomButtons.length; i++){
-                zoomButtons[i].hidden = false;
-            }
+            // for(let i = 0; i < zoomButtons.length; i++){
+            //     zoomButtons[i].hidden = false;
+            // }
 
             reDrawGraph(g, 0, 0, 1);
 

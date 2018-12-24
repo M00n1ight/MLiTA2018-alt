@@ -3,7 +3,7 @@ import classes.Algorithms as algs
 import classes.Graph as gr
 
 graph = gr.Graph()
-graph.read_graph_from_csv('nodes.csv', 'roads.csv')
+graph.read_graph_from_csv('monreal_nodes.csv', 'monreal_roads.csv')
 print('GRAPH READ')
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

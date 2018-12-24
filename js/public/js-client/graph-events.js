@@ -138,6 +138,13 @@ buttonUnscale.addEventListener('click', function(event){
 
 let buttonClearPoints = document.getElementById('clear_points');
 buttonClearPoints.addEventListener('click', function(event){
+    isPath = false;
+
+    for (let i = 0; i < oldLines.length; i++){
+        oldLines[i].remove();
+    }
+    oldLines = [];
+
     pointFrom = undefined;
     pointTo = undefined;
     if (circleFrom){
@@ -243,6 +250,74 @@ buttonFindNodes.addEventListener('click', function(event){
 
 let buttonFindPath = document.getElementById('find_path');
 buttonFindPath.addEventListener('click', function(event){
+
+    //CODE FROM FIND NODES EVENT
+    //ITS NOT COPIED BC FIND NODES BUTTON IS ONLY DEV BUTTON
+    console.log('START SEARCH');
+    //SEARCH VARIABLES
+    let minSqFrom = 1000000;
+    let minSqTo = 1000000;
+    let deltaLon = graph.maxLon - graph.minLon;
+    let deltaLat = graph.maxLat - graph.minLat;
+
+    //CALCULATION VARIABLES
+    let scaledOffsetx = currentOffsetx / canvas.width;
+    let scaledOffsety = currentOffsety / canvas.height;
+    let scaledelta2lon = scale / deltaLon * 2;
+    let scaledelta2lat = scale / deltaLat * 2;
+
+    //SEARCH
+    for (let i = 0; i < graph.edgesAmount; i++){
+        if ((i+1) % 1000 === 0)
+            console.log('1000 iteration');
+
+        //FIRSTLY DO FOR NODE FROM OF EDGE
+        let cLonLat = fromDegToShaderXY(graph[i].from.lon, graph[i].from.lat);
+
+        //CALCULATE DISTANCE FROM 'FROM' AND 'TO'
+        let distanceFrom =
+            Math.pow(cLonLat.x - pointFrom.x, 2) + Math.pow(cLonLat.y - pointFrom.y, 2);
+        let distanceTo =
+            Math.pow(cLonLat.x - pointTo.x, 2) + Math.pow(cLonLat.y - pointTo.y, 2);
+
+        //COMPARE DISTANCES
+        if (distanceFrom < minSqFrom){
+            minSqFrom = distanceFrom;
+            from = graph[i].from;
+        }
+
+        if (distanceTo < minSqTo){
+            minSqTo = distanceTo;
+            to = graph[i].from;
+        }
+
+        //THEN DO FOR NODE TO OF EDGE
+        //TRANSLATE DEFAULT COORDS TO CURRENT MAP STATE
+        cLonLat = fromDegToShaderXY(graph[i].to.lon, graph[i].to.lat);
+
+        //CALCULATE DISTANCE FROM 'FROM' AND 'TO'
+        distanceFrom =
+            Math.pow(cLonLat.x - pointFrom.x, 2) + Math.pow(cLonLat.y - pointFrom.y, 2);
+        distanceTo =
+            Math.pow(cLonLat.x - pointTo.x, 2) + Math.pow(cLonLat.y - pointTo.y, 2);
+
+        //COMPARE DISTANCES
+        if (distanceFrom < minSqFrom){
+            minSqFrom = distanceFrom;
+            from = graph[i].to;
+        }
+
+        if (distanceTo < minSqTo){
+            minSqTo = distanceTo;
+            to = graph[i].to;
+        }
+    }
+    console.log('SEARCH END');
+    console.log(`FROM:\n lon ${from.lon}\n lat ${from.lat}`);
+    console.log(`TO:\n lon ${to.lon}\n lat ${to.lat}`);
+    //END
+
+    //FINDING PATH
     if (from && to) {
         console.log(from, to);
         $.ajax({
