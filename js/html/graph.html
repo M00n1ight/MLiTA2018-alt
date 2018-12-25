@@ -10,12 +10,21 @@
 <body>
     <div class="button-start" id="startButton">START</div>
     <canvas id="canvas" style="border: 1px solid black" hidden="hidden"></canvas>
-    <div id="container-buttons" class="container-buttons" hidden="hidden">
-        <button id="find_path" hidden="hidden" class="ui_button" style="top: 170px">Find the path</button>
-        <button id="clear_points" hidden="hidden" class="ui_button" style="top: 70px">Clear points</button>
-        <button id="scale" hidden="hidden" class="ui_button" style="top: 10px">+</button>
-        <button id="unscale" hidden="hidden" class="ui_button" style="top: 40px">-</button>
-        <button id="find_nodes" hidden="hidden" class="ui_button" style="top: 120px">Find the nodes</button>
+    <div id="menu" hidden="hidden">
+        <div id="container-buttons" class="container-buttons">
+            <button id="find_path" hidden="hidden" class="ui_button" style="top: 170px">Find the path</button>
+            <button id="clear_points" hidden="hidden" class="ui_button" style="top: 70px">Clear points</button>
+            <button id="scale" hidden="hidden" class="ui_button" style="top: 10px">+</button>
+            <button id="unscale" hidden="hidden" class="ui_button" style="top: 40px">-</button>
+            <button id="find_nodes" hidden="hidden" class="ui_button" style="top: 120px">Find the nodes</button>
+        </div>
+
+        <select id="select_alg">
+            <option value="0">Dijkstra</option>
+            <option value="1">Dijkstra with early stop</option>
+            <option value="2">Two-way Dijkstra</option>
+            <option value="3">Arc-flags</option>
+        </select>
     </div>
 
     <script src="/js-client/svg.js"></script>

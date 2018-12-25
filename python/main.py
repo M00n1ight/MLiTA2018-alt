@@ -1,10 +1,11 @@
 import socket
-import classes.Algorithms as algs
+# import classes.Algorithms as algs
 import classes.Graph as gr
+import AlgoChooser as Chooser
 
 graph = gr.Graph()
 # graph.read_graph_from_csv('monreal_nodes.csv', 'monreal_roads.csv')
-graph.read_graph_from_csv('nodesT.csv', 'roadsT.csv')
+graph.read_graph_from_csv('spbNodes.csv', 'spbRoads.csv')
 print('GRAPH READ')
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -24,13 +25,12 @@ while True:
             raise RuntimeError("socket conn broke")
         if data1:
             points = [float(x) for x in data1.decode('utf-8').split()]
+            algorithm = Chooser.get_algorithm_by_id(int(points[4]))
             # print(points)
+            print('Chosen algorithm id: {}'.format(points[4]))
             print('Calculating path')
-            # dist, paths = algs.dijkstra_way_by_ids(
-            #     graph, points[0], points[1], points[2], points[3]
-            # )
 
-            dist, paths = algs.dijkstra_early_stop_way_by_ids(
+            dist, paths = algorithm(
                 graph, points[0], points[1], points[2], points[3]
             )
 

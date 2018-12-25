@@ -318,11 +318,15 @@ buttonFindPath.addEventListener('click', function(event){
     console.log(`TO:\n lon ${to.lon}\n lat ${to.lat}`);
     //END
 
+    let select = document.getElementById('select_alg');
+    let algorithmId = select.options[select.selectedIndex].value;
+    console.log(`Selected: ${algorithmId}`);
+
     //FINDING PATH
     if (from && to) {
         console.log(from, to);
         $.ajax({
-            url: `/ajax/calculatePath?fromLon=${from.lon}&fromLat=${from.lat}&toLon=${to.lon}&toLat=${to.lat}`,
+            url: `/ajax/calculatePath?alg=${algorithmId}&fromLon=${from.lon}&fromLat=${from.lat}&toLon=${to.lon}&toLat=${to.lat}`,
             success: function (data) {
                 console.log("DATA FETCH");
                 console.log(data);

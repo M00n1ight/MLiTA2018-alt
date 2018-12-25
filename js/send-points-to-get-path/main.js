@@ -5,7 +5,8 @@ module.exports = function(res, points){
     client.setEncoding('utf-8');
     client.connect(8081, 'localhost', function(){
         console.log('Connected!');
-        let str = points.from.lon + ' ' + points.from.lat + ' ' + points.to.lon + ' ' + points.to.lat;
+        let str = points.from.lon + ' ' + points.from.lat + ' '
+            + points.to.lon + ' ' + points.to.lat + ' ' + points.algo;
         console.log(str);
         client.write(str, 'utf-8', function(){
             console.log('Sent: ' + str)

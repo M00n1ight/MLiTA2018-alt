@@ -7,8 +7,8 @@ let graph = undefined;
 buttonStart.onclick = function(){
     console.log('BUTTON CLICKED');
     let cnv = document.getElementById('canvas');
-    let containerButtons = document.getElementById('container-buttons');
-    containerButtons.hidden = false;
+    let menu = document.getElementById('menu');
+    menu.style.display = 'flex';
     // for(let i = 0; i < zoomButtons.length; i++){
     //     zoomButtons[i].hidden = false;
     // }

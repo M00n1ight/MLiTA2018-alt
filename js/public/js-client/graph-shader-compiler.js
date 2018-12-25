@@ -104,5 +104,5 @@ function reDrawGraph(graph, offsetx, offsety, scale){
 
     //DRAW
     gl.drawArrays(gl.LINES, 0, graph.edgesAmount * 2);
-    console.log('DRAWN');
+    //console.log('DRAWN');
 }

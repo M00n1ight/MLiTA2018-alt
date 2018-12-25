@@ -41,7 +41,7 @@ function reDrawSvg(){
 
     if (readyA && pointFrom){
         let xy = fromShaderXYToClickTY(pointFrom.x, pointFrom.y);
-        console.log(xy);
+        //console.log(xy);
         circleFrom.setAttribute('cx', xy.x);
         circleFrom.setAttribute('cy', xy.y);
         textA.setAttribute('x', (xy.x - 9).toString());
@@ -62,7 +62,7 @@ function reDrawSvg(){
 
 
     function drawPath(){
-        console.log('PATH REDRAWN');
+        //console.log('PATH REDRAWN');
 
         //deleting old lines if exist
         if (oldLines.length !== 0) {
