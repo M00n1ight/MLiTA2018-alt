@@ -336,13 +336,16 @@ buttonFindPath.addEventListener('click', function(event){
                     alert('No way found');
                 }
 
-                path = data.map(function(val, index,data){
+                path = data.path.map(function(val, index, data){
                     let xy = fromDegToShaderXY(val.x, val.y);
                     return {
                         x: xy.x,
                         y: xy.y
                     }
                 });
+
+                if (data.time > 0)
+                    alert(`${data.time} sec`);
 
                 isPath = true;
                 reDrawSvg();
@@ -358,6 +361,7 @@ canvas.addEventListener('click', function(event){
             console.log(`pointFrom set to ${pointFrom.x}:${pointFrom.y}`);
         }
         else {
+            svgRemovePath();
             pointTo = fromClickXYToShaderXY(event.offsetX, event.offsetY);
             console.log(`pointTo set to ${pointTo.x}:${pointTo.y}`);
         }

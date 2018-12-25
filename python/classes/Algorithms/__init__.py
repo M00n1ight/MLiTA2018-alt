@@ -110,9 +110,11 @@ def dijkstra_way(graph, node_from, node_to):
 
     print('Dijkstra\'s main done in {} sec'.format(time.time() - time_start))
 
+    final_time = -1
+
     # Если добраться невозможно
     if length == -1:
-        return -1, []
+        return -1, [], final_time
 
     # Searching for all paths
     paths = list()
@@ -144,12 +146,14 @@ def dijkstra_way(graph, node_from, node_to):
 
     time_end = time.time()
 
-    print('Full Dijkstra done in {} sec'.format(time_end - time_start))
+    final_time = time_end - time_start
+
+    print('Full Dijkstra done in {} sec'.format(final_time))
 
     for i in range(count):
         paths[i] = paths[i][::-1]
 
-    return dists[node_from.id], paths
+    return dists[node_from.id], paths, final_time
 
 
 # Dijkstra по тэгам
@@ -257,12 +261,13 @@ def dijkstra_early_stop_way(graph, node_from, node_to):
 
     time_end = time.time()
 
-    print('Full Dijkstra done in {} sec'.format(time_end - time_start))
+    final_time = time_end - time_start
+    print('Full Dijkstra done in {} sec'.format(final_time))
 
     for i in range(count):
         paths[i] = paths[i][::-1]
 
-    return dists[node_from.id], paths
+    return dists[node_from.id], paths, final_time
 
 
 def dijkstra_early_stop_way_by_ids(graph, x1, y1, x2, y2):

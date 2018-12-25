@@ -18,19 +18,22 @@ module.exports = function(res, points){
         client.destroy();
 
         let data_f = data.toString().split(' ');
-        console.log(data_f.length);
+        //console.log(data_f.length);
 
-        let path = [];
+        let formatted_data = {};
 
-        for (let i = 0; i < data_f.length - 1; i += 2){
-            path.push({
+        formatted_data.time = Math.floor(data_f[data_f.length - 1] * 1000) / 1000;
+        formatted_data.path = [];
+
+        for (let i = 0; i < data_f.length - 2; i += 2){
+            formatted_data.path.push({
                 x: Number(data_f[i]),
                 y: Number(data_f[i+1])
             })
         }
 
-        console.log(path);
+        console.log(formatted_data);
 
-        res.json(path);
+        res.json(formatted_data);
     });
 };

@@ -1,15 +1,14 @@
 import socket
-# import classes.Algorithms as algs
-import classes.Graph as gr
+import classes.Graph as Gr
 import AlgoChooser as Chooser
-
-graph = gr.Graph()
-# graph.read_graph_from_csv('monreal_nodes.csv', 'monreal_roads.csv')
-graph.read_graph_from_csv('spbNodes.csv', 'spbRoads.csv')
-print('GRAPH READ')
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 8081))
+
+graph = Gr.Graph()
+graph.read_graph_from_csv('spbNodes.csv', 'spbRoads.csv')
+print('GRAPH READ')
+
 sock.listen(1)
 
 while True:
@@ -27,10 +26,11 @@ while True:
             points = [float(x) for x in data1.decode('utf-8').split()]
             algorithm = Chooser.get_algorithm_by_id(int(points[4]))
             # print(points)
+            print('--------------------------------------')
             print('Chosen algorithm id: {}'.format(points[4]))
             print('Calculating path')
 
-            dist, paths = algorithm(
+            dist, paths, time = algorithm(
                 graph, points[0], points[1], points[2], points[3]
             )
 
@@ -46,8 +46,12 @@ while True:
                 print('Path length: {}'.format(len(paths[0])))
                 for i in paths[0]:
                     path_f += '{} {} '.format(i.x, i.y)
+                path_f += str(time)
+                print('Send time: {}'.format(time))
                 conn.send(path_f.encode('utf-8'))
                 print('Data sent!')
+
+            print('--------------------------------------')
 
         else:
             print('No data in query!')

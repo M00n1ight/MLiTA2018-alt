@@ -66,13 +66,14 @@ function reDrawSvg(){
 
         //deleting old lines if exist
         if (oldLines.length !== 0) {
+            console.log('Inside if');
             for (let i = 0; i < oldLines.length; i++) {
-                //oldLines[i].style.visibility = 'hidden';
+                oldLines[i].style.visibility = 'hidden';
                 oldLines[i].remove();
             }
             oldLines = [];
-        }
 
+        }
         //console.log(path);
 
         let clickXY = [];
@@ -134,4 +135,18 @@ function reDrawSvg(){
     }
 
     //write a convert from click xy to view xy
+}
+
+function svgRemovePath(){
+    console.log('Removing svg path');
+    path = [];
+    if (oldLines.length !== 0) {
+        console.log('Inside if');
+        for (let i = 0; i < oldLines.length; i++) {
+            oldLines[i].style.visibility = 'hidden';
+            oldLines[i].remove();
+        }
+        oldLines = [];
+
+    }
 }
