@@ -3,7 +3,8 @@ import classes.Algorithms as algs
 import classes.Graph as gr
 
 graph = gr.Graph()
-graph.read_graph_from_csv('monreal_nodes.csv', 'monreal_roads.csv')
+# graph.read_graph_from_csv('monreal_nodes.csv', 'monreal_roads.csv')
+graph.read_graph_from_csv('nodesT.csv', 'roadsT.csv')
 print('GRAPH READ')
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,7 +26,11 @@ while True:
             points = [float(x) for x in data1.decode('utf-8').split()]
             # print(points)
             print('Calculating path')
-            dist, paths = algs.dijkstra_way_by_ids(
+            # dist, paths = algs.dijkstra_way_by_ids(
+            #     graph, points[0], points[1], points[2], points[3]
+            # )
+
+            dist, paths = algs.dijkstra_early_stop_way_by_ids(
                 graph, points[0], points[1], points[2], points[3]
             )
 

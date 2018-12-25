@@ -108,6 +108,8 @@ def dijkstra_way(graph, node_from, node_to):
     # Итоговое расстояние и переменная для путей (might be more than one)
     length = dists[node_to.id]
 
+    print('Dijkstra\'s main done in {} sec'.format(time.time() - time_start))
+
     # Если добраться невозможно
     if length == -1:
         return -1, []
@@ -142,7 +144,7 @@ def dijkstra_way(graph, node_from, node_to):
 
     time_end = time.time()
 
-    print('Dijkstra done in {} sec'.format((time_end - time_start)*1000))
+    print('Full Dijkstra done in {} sec'.format(time_end - time_start))
 
     for i in range(count):
         paths[i] = paths[i][::-1]
@@ -160,3 +162,110 @@ def dijkstra_way_by_ids(graph, x1, y1, x2, y2):
     f = graph._get_node_by_xy(x1, y1)
     t = graph._get_node_by_xy(x2, y2)
     return dijkstra_way(graph, f, t)
+
+
+# Dijkstra with stop criteria
+def dijkstra_early_stop_way(graph, node_from, node_to):
+    if not isinstance(graph, classes.Graph.Graph):
+        raise IOError("Wrong graph type")
+    if not isinstance(node_from, classes.Node.Node):
+        raise IOError("Wrong node_from type")
+    if not isinstance(node_to, classes.Node.Node):
+        raise IOError("Wrong node_to type")
+
+    time_start = time.time()
+
+    # Инициализируем расстояния
+    dists = {a: -1 for a in graph.nodes}
+    dists[node_from.id] = 0
+    # Init edges that leads to a node
+    edges_to = dict()
+    edges_to.update({node_from.id: []})
+    # Init queue for BFS
+    queue = list()
+    queue.append(node_from)
+
+    # Ищем расстояния до точек
+    while queue:
+
+        # Поиск минимального (по расстоянию) элемента
+        minimum = -1
+        current_node = None
+        for i in queue:
+            if minimum == -1 or dists[i.id] <= minimum:
+                current_node = i
+                minimum = dists[i.id]
+
+        if current_node == node_to:
+            break
+
+        # Считаем пути до следующих вершин
+        next_edges = [x for x in current_node.incidentEdges if x.n_from == current_node]
+        # next_edges = [x for x in current_node.incidentEdges]
+        queue.remove(current_node)
+        for x in next_edges:
+            # Refresh distances
+            # if we haven't been to node
+            if dists[x.n_to.id] == -1:
+                queue.append(x.n_to)
+                dists[x.n_to.id] = dists[current_node.id] + x.get_weight()
+                edges_to.update({x.n_to.id: [x]})
+            # if we have been to node, but got a new less distance
+            elif dists[x.n_to.id] > x.get_weight() + dists[current_node.id]:
+                dists[x.n_to.id] = x.get_weight() + dists[current_node.id]
+                edges_to[x.n_to] = [x]
+            # if we have been to node, and got another way to get to this node with the less dist
+            elif dists[x.n_to.id] >= x.get_weight() + dists[current_node.id]:
+                edges_to[x.n_to.id].append(x)
+
+    # Итоговое расстояние и переменная для путей (might be more than one)
+    length = dists[node_to.id]
+
+    print('Dijkstra\'s main done in {} sec'.format(time.time() - time_start))
+
+    # Если добраться невозможно
+    if length == -1:
+        return -1, []
+
+    # Searching for all paths
+    paths = list()
+    paths.append([])
+    path_n = 0
+    stacks = list()
+    stack = [node_to]
+    stacks.append(stack)
+    count = 0
+    while stacks:
+        current_node = stacks[0].pop()
+        paths[path_n].append(current_node)
+        amount_of_ways_from = len(edges_to[current_node.id])
+        if amount_of_ways_from > 0:
+            for i in range(amount_of_ways_from - 1):
+                copy = stacks[0].copy()
+                copy.append(edges_to[current_node.id][i + 1].n_from)
+                stacks.append(copy)
+                copy = paths[path_n].copy()
+                # copy.append(edges_to[current_node][i + 1].n_from)
+                paths.append(copy)
+
+            stacks[0].append(edges_to[current_node.id][0].n_from)
+
+        else:
+            stacks.pop(0)
+            path_n += 1
+            count += 1
+
+    time_end = time.time()
+
+    print('Full Dijkstra done in {} sec'.format(time_end - time_start))
+
+    for i in range(count):
+        paths[i] = paths[i][::-1]
+
+    return dists[node_from.id], paths
+
+
+def dijkstra_early_stop_way_by_ids(graph, x1, y1, x2, y2):
+    f = graph._get_node_by_xy(x1, y1)
+    t = graph._get_node_by_xy(x2, y2)
+    return dijkstra_early_stop_way(graph, f, t)

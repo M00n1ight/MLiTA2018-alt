@@ -252,7 +252,8 @@ let buttonFindPath = document.getElementById('find_path');
 buttonFindPath.addEventListener('click', function(event){
 
     //CODE FROM FIND NODES EVENT
-    //ITS NOT COPIED BC FIND NODES BUTTON IS ONLY DEV BUTTON
+    // ITS COPIED INSTEAD OF CLICK SIMULATION
+    // BC FIND NODES BUTTON IS ONLY DEV BUTTON
     console.log('START SEARCH');
     //SEARCH VARIABLES
     let minSqFrom = 1000000;
