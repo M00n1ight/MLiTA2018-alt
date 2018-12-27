@@ -229,7 +229,7 @@ def dijkstra_early_stop_way(graph, node_from, node_to):
 
     # Если добраться невозможно
     if length == -1:
-        return -1, []
+        return -1, [], -1
 
     # Searching for all paths
     paths = list()

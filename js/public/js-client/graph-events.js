@@ -332,7 +332,7 @@ buttonFindPath.addEventListener('click', function(event){
                 console.log(data);
                 console.log("END DATA FETCH");
 
-                if (data.length < 2){
+                if (data.path.length < 2){
                     alert('No way found');
                 }
 
