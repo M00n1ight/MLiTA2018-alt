@@ -9,26 +9,24 @@ let Graph = require('./../classes/graph');
 let Node = require('./../classes/node');
 let Edge = require('./../classes/edge');
 
-
 let graph = new Graph;
-
-// fs.createReadStream('map.json', {encoding: 'utf8'})
-//     .pipe(JSONStream.parse('elements.*'))
-//     .pipe(es.mapSync(callback))
-//     .on('end', done);
+let testCounter = 0;
 
 module.exports = function(res){
     graphLoad.on('loaded', ()=>{
         console.log('GRAPHLOAD EMITTED');
         res.json(graph.toViewJSON());
+        console.log('JSON Done');
     });
-    fs.createReadStream('extract-roads-master/maps/SPb.json', {encoding: 'utf8'})
+    fs.createReadStream('extract-roads-master/maps/Toronto.json', {encoding: 'utf8'})
         .pipe(JSONStream.parse('elements.*'))
         .pipe(es.mapSync(callback))
         .on('end', done);
 };
 
 function callback(el) {
+    testCounter++;
+    if (!(testCounter % 1000)) console.log(testCounter);
     if (el.type === 'node') processOSMNode(el);
     else if (el.type === 'way') processOSMWay(el);
 }

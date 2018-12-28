@@ -1,3 +1,6 @@
+import heapq
+
+
 class PriorityQueueByDict:
 
     def __init__(self):
@@ -21,3 +24,17 @@ class PriorityQueueByDict:
                 prior = value
         self.__queue.pop(item)
         return item, prior
+
+
+class PriorityQueue:
+    def __init__(self):
+        self.elements = []
+
+    def is_empty(self):
+        return len(self.elements) == 0
+
+    def push(self, item, priority):
+        heapq.heappush(self.elements, (priority, item))
+
+    def pop(self):
+        return heapq.heappop(self.elements)[1]

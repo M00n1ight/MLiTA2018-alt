@@ -6,7 +6,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 8081))
 
 graph = Gr.Graph()
-graph.read_graph_from_csv('SPb_nodes.csv', 'SPb_roads.csv')
+graph.read_graph_from_csv('Toronto_nodes.csv', 'Toronto_roads.csv')
 print('GRAPH READ')
 
 sock.listen(1)

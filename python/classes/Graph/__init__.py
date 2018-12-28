@@ -15,7 +15,8 @@ class Graph:
             counter = 0
             for i in self.edges:
                 counter += 1
-                print(counter)
+                if counter % 10000 == 0:
+                    print(counter)
                 i.n_from.incidentEdges.append(i)
                 i.n_to.incidentEdges.append(i)
 
@@ -106,7 +107,7 @@ class Graph:
     def __read_roads(self, roads):
         counter = 1
         for (ind, row) in roads.iterrows():
-            if (counter % 100 == 0):
+            if counter % 10000 == 0:
                 print(counter)
             counter += 1
             self.edges.append(Edge.Edge(
