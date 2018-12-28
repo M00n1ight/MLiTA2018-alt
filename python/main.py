@@ -64,9 +64,10 @@ while True:
         print('socket error')
         conn.send(b'server error')
 
-    except BaseException:
-        print('BaseException')
-        conn.send(b'Unknown error')
+    # except BaseException as inst:
+    #     print('BaseException')
+    #     print(inst)
+    #     conn.send(b'Unknown error')
 
     finally:
         conn.close()

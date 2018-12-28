@@ -13,7 +13,10 @@ class PriorityQueueByDict:
         item = None
         prior = None
         for key, value in self.__queue.items():
-            if prior is None or prior < value:
+            if prior is None:
+                item = key
+                prior = value
+            elif prior > value:
                 item = key
                 prior = value
         self.__queue.pop(item)

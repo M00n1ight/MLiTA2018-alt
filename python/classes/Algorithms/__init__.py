@@ -285,11 +285,13 @@ def bidirectional_dijkstra(graph, node_from, node_to):
     if not isinstance(node_to, classes.Node.Node):
         raise IOError("Wrong node_to type")
 
+    time_start = time.time()
+
     dists_fw = {a: -1 for a in graph.nodes}
-    dists_fw[node_from] = 0
+    dists_fw[node_from.id] = 0
 
     dists_bw = {a: -1 for a in graph.nodes}
-    dists_bw[node_to] = 0
+    dists_bw[node_to.id] = 0
 
     edge_to_fw = dict()
     edge_to_bw = dict()
@@ -308,6 +310,7 @@ def bidirectional_dijkstra(graph, node_from, node_to):
 
         # Forward step
         current_node = queue_fw.get()[0]
+        covering_fw.update({current_node: True})
 
         if covering_bw.get(current_node, False):
             center = current_node
@@ -315,14 +318,15 @@ def bidirectional_dijkstra(graph, node_from, node_to):
 
         next_edges = [x for x in current_node.incidentEdges if x.n_from == current_node]
         for edge in next_edges:
-            if dists_fw[edge.n_to] == -1 or dists_fw[edge.n_to] > dists_fw[current_node] + edge.get_weight():
-                dists_fw[edge.n_to] = dists_fw[current_node] + edge.get_weight()
+            if dists_fw[edge.n_to.id] == -1 or dists_fw[edge.n_to.id] > dists_fw[current_node.id] + edge.get_weight():
+                dists_fw[edge.n_to.id] = dists_fw[current_node.id] + edge.get_weight()
                 edge_to_fw.update({edge.n_to: edge})
-                queue_fw.update(edge.n_to, dists_fw[edge.n_to])
+                queue_fw.update(edge.n_to, dists_fw[edge.n_to.id])
 
 
         # Backward step
         current_node = queue_bw.get()[0]
+        covering_bw.update({current_node: True})
 
         if covering_fw.get(current_node, False):
             center = current_node
@@ -330,10 +334,10 @@ def bidirectional_dijkstra(graph, node_from, node_to):
 
         next_edges = [x for x in current_node.incidentEdges if x.n_to == current_node]
         for edge in next_edges:
-            if dists_bw[edge.n_from] == -1 or dists_bw[edge.n_from] > dists_bw[current_node] + edge.get_weight():
-                dists_bw[edge.n_from] = dists_bw[current_node] + edge.get_weight()
+            if dists_bw[edge.n_from.id] == -1 or dists_bw[edge.n_from.id] > dists_bw[current_node.id] + edge.get_weight():
+                dists_bw[edge.n_from.id] = dists_bw[current_node.id] + edge.get_weight()
                 edge_to_bw.update({edge.n_from: edge})
-                queue_bw.update({edge.n_from, dists_bw[edge.n_from]})
+                queue_bw.update(edge.n_from, dists_bw[edge.n_from.id])
         pass
 
     if center is None:
@@ -355,7 +359,9 @@ def bidirectional_dijkstra(graph, node_from, node_to):
     path.append(center)
     path += path_bw
 
-    return dists_fw[center] + dists_bw[center], [path], -1
+    time_end = time.time()
+
+    return dists_fw[center.id] + dists_bw[center.id], [path], time_end - time_start
 
 
 def bidirectional_dijkstra_by_ids(graph, x1, y1, x2, y2):
