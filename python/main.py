@@ -6,7 +6,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 8081))
 
 graph = Gr.Graph()
-graph.read_graph_from_csv('London_nodes.csv', 'London_roads.csv')
+graph.read_graph_from_csv('SPb_nodes.csv', 'SPb_roads.csv')
 print('GRAPH READ')
 
 sock.listen(1)
@@ -61,8 +61,12 @@ while True:
         conn.send(b'timeout')
 
     except socket.error:
-        print('scoket error')
+        print('socket error')
         conn.send(b'server error')
+
+    except BaseException:
+        print('BaseException')
+        conn.send(b'Unknown error')
 
     finally:
         conn.close()

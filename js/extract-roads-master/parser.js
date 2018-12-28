@@ -22,7 +22,7 @@ module.exports = function(res){
         console.log('GRAPHLOAD EMITTED');
         res.json(graph.toViewJSON());
     });
-    fs.createReadStream('extract-roads-master/maps/London.json', {encoding: 'utf8'})
+    fs.createReadStream('extract-roads-master/maps/SPb.json', {encoding: 'utf8'})
         .pipe(JSONStream.parse('elements.*'))
         .pipe(es.mapSync(callback))
         .on('end', done);

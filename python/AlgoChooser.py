@@ -3,6 +3,7 @@ import classes.Algorithms as Algs
 algorithms = list()
 algorithms.append(Algs.dijkstra_way_by_ids)
 algorithms.append(Algs.dijkstra_early_stop_way_by_ids)
+algorithms.append(Algs.bidirectional_dijkstra_by_ids)
 
 
 def get_algorithm_by_id(alg_id):
