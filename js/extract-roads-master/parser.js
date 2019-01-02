@@ -31,7 +31,7 @@ module.exports = function(res){
         res.json(graph.toViewJSON());
         console.log('JSON Done');
     });
-    fs.open('extract-roads-master/maps/London_bin', 'r', function(err, fd) {
+    fs.open('extract-roads-master/maps/SPb3_bin', 'r', function(err, fd) {
         fs.fstat(fd, function(err, stats) {
             var bufferSize=stats.size,
                 chunkSize=512,
