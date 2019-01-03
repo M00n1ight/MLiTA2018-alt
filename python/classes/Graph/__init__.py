@@ -1,12 +1,13 @@
 from classes import Edge, Node
 import pandas as pd
-
+import os
 
 class Graph:
 
     def __init__(self, nodes=None, edges=None):
         self.nodes = nodes
         self.edges = edges
+        self.marks = list()
         if nodes is not None and edges is not None:
             self.normalize()
 
@@ -22,12 +23,36 @@ class Graph:
 
     def read_graph_from_csv(self, file_name_nodes, file_name_roads):
         self.nodes, self.edges = dict(), list()
+        os.system('cls')
+        print('reading nodes')
         self.__read_nodes(pd.read_csv('maps/' + file_name_nodes))
+        os.system('cls')
         print('nodes done')
+        print('reading roads')
         self.__read_roads(pd.read_csv('maps/' + file_name_roads))
+        os.system('cls')
+        print('nodes done')
         print('edges done')
         self.normalize()
-        print('norm done')
+        os.system('cls')
+        print('Graph is read')
+
+    # тут _read_nodes_alt
+    def read_graph_from_csv_alt(self, file_name_nodes, file_name_roads):
+        self.nodes, self.edges = dict(), list()
+        os.system('cls')
+        print('reading nodes')
+        self.__read_nodes_alt(pd.read_csv('maps/' + file_name_nodes))
+        os.system('cls')
+        print('nodes done')
+        print('reading roads')
+        self.__read_roads(pd.read_csv('maps/' + file_name_roads))
+        os.system('cls')
+        print('nodes done')
+        print('edges done')
+        self.normalize()
+        os.system('cls')
+        print('Graph is read')
 
     # Вспомогательные паблик методы
     def read_graph_as_matrix(self, filename):
@@ -101,17 +126,35 @@ class Graph:
         return 0
 
     def __read_nodes(self, nodes):
+        count = len(nodes.index)
+        counter = 1
         for (ind, row) in nodes.iterrows():
+            if counter % 10000 == 0:
+                print(int(counter / count * 100), '%')
+            counter += 1
             self.nodes[row.id] = Node.Node(id_=row.id, x=row.lon, y=row.lat)
 
     def __read_roads(self, roads):
         counter = 1
+        count = len(roads.index)
         for (ind, row) in roads.iterrows():
             if counter % 10000 == 0:
-                print(counter)
+                print(int(counter / count * 100), '%')
             counter += 1
             self.edges.append(Edge.Edge(
                 self.nodes[row.fromId],
                 self.nodes[row.toId],
                 row.weight
             ))
+
+
+    # оно читает новый столбец в csv
+    def __read_nodes_alt(self, nodes):
+        count = len(nodes.index)
+        counter = 1
+        for (ind, row) in nodes.iterrows():
+            if counter % 10000 == 0:
+                print(int(counter / count * 100), '%')
+            counter += 1
+            self.nodes[row.id] = Node.Node(id_=row.id, x=row.lon, y=row.lat)
+            self.nodes[row.id].dist_to_mark = [float(i) for i in row.dists[1:-1].split(',')]

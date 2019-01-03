@@ -15,7 +15,7 @@ algorithms.append(Algs.dijkstra_early_stop_way_un_by_ids)
 algorithms.append(Algs.bidirectional_dijkstra_un_by_ids)
 algorithms.append(Algs.astar_un_by_ids)
 algorithms.append(Algs.bidirectional_astar_un_by_ids)
-
+algorithms.append(Algs.alt_by_ids)
 
 
 def get_algorithm_by_id(alg_id):
