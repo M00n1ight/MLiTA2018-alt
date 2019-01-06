@@ -6,8 +6,12 @@ import alt
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 8081))
 
+current_city = 'SPb3'
+print('Current city: ' + current_city)
+
 graph = Gr.Graph()
-graph.read_graph_from_csv_alt('Toronto_nodes_alt.csv', 'Toronto_roads.csv')
+# graph.read_graph_from_csv_alt('Toronto_nodes_alt.csv', 'Toronto_roads.csv')
+graph.read_graph_from_csv_alt(current_city + '_nodes_alt.csv', current_city + '_roads.csv')
 print('GRAPH READ')
 
 sock.listen(1)

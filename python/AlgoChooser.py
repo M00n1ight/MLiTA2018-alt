@@ -17,6 +17,9 @@ algorithms.append(Algs.astar_un_by_ids)
 algorithms.append(Algs.bidirectional_astar_un_by_ids)
 algorithms.append(Algs.alt_by_ids)
 
+# Parallel algorithms
+algorithms.append(Algs.bidirectional_dijkstra_un_p_by_ids)
+
 
 def get_algorithm_by_id(alg_id):
     if alg_id < len(algorithms):

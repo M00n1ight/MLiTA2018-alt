@@ -1,0 +1,1 @@
+module.exports = 'SPb3'

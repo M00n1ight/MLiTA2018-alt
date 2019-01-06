@@ -2,6 +2,7 @@ let JSONStream = require('JSONStream');
 let es = require('event-stream');
 let fs = require('fs');
 let EventEmitter = require('events').EventEmitter;
+let Buffer = require('buffer').Buffer;
 
 let graphLoad = new EventEmitter;
 
@@ -12,16 +13,43 @@ let Edge = require('./../classes/edge');
 let graph = new Graph;
 let testCounter = 0;
 
-module.exports = function(res){
+// module.exports = function(res){
+//     graphLoad.on('loaded', ()=>{
+//         console.log('GRAPHLOAD EMITTED');
+//         res.json(graph.toViewJSON());
+//         console.log('JSON Done');
+//     });
+//     fs.createReadStream('extract-roads-master/maps/Toronto.json', {encoding: 'utf8'})
+//         .pipe(JSONStream.parse('elements.*'))
+//         .pipe(es.mapSync(callback))
+//         .on('end', done);
+// };
+
+module.exports = function(res, current_city){
     graphLoad.on('loaded', ()=>{
         console.log('GRAPHLOAD EMITTED');
         res.json(graph.toViewJSON());
         console.log('JSON Done');
     });
-    fs.createReadStream('extract-roads-master/maps/Toronto.json', {encoding: 'utf8'})
-        .pipe(JSONStream.parse('elements.*'))
-        .pipe(es.mapSync(callback))
-        .on('end', done);
+    fs.open('extract-roads-master/maps/'+ current_city + '_bin', 'r', function(err, fd) {
+        fs.fstat(fd, function(err, stats) {
+            var bufferSize=stats.size,
+                chunkSize=512,
+                buffer=new Buffer(bufferSize),
+                bytesRead = 0;
+
+            while (bytesRead < bufferSize) {
+                if ((bytesRead + chunkSize) > bufferSize) {
+                    chunkSize = (bufferSize - bytesRead);
+                }
+                fs.read(fd, buffer, bytesRead, chunkSize, bytesRead);
+                bytesRead += chunkSize;
+            }
+            console.log(buffer.toString('utf8', 0, bufferSize));
+            fs.close(fd);
+            res.json(JSON.parse(buffer));
+        });
+    });
 };
 
 function callback(el) {

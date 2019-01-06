@@ -1,4 +1,5 @@
 const express = require('express');
+let current_city = require('./current_city');
 
 const app = express();
 const port = 8080;
@@ -13,7 +14,8 @@ app.get('/', function(req,res){
 
 app.get('/ajax/getGraph', function(req,res){
     delete require.cache[require.resolve('./extract-roads-master/parser')];
-    require('./extract-roads-master/parser')(res);
+    //delete require.cache[require.resolve('./current_city')];
+    require('./extract-roads-master/parser')(res, current_city);
 });
 
 app.get('/ajax/calculatePath', function(req, res){
@@ -44,5 +46,5 @@ app.listen(port, (err)=>{
     if (err){
         console.log(err)
     }
-    console.log(`Server is on ${port}`);
+    console.log(`Current city: ${current_city}\nServer is on ${port}`);
 });
