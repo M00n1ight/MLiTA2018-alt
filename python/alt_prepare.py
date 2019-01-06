@@ -5,7 +5,7 @@ import pandas as pd
 
 gr = Gr.Graph()
 print('read graph')
-gr.read_graph_from_csv('Toronto_nodes.csv', 'Toronto_roads.csv')
+gr.read_graph_from_csv('Paris_nodes.csv', 'Paris_roads.csv')
 
 print('init ALT')
 
@@ -41,5 +41,5 @@ nodes = {'id' : ids, 'lon' : x, 'lat' : y, 'dists' : dist_to_mark}
 nodes_df = pd.DataFrame(nodes)
 
 print('convert to csv')
-nodes_df.to_csv('maps/Toronto_nodes_alt.csv', index = False)
+nodes_df.to_csv('maps/Paris_nodes_alt.csv', index = False)
 print('nodes done')

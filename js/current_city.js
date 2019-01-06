@@ -1,1 +1,1 @@
-module.exports = 'SPb3'
+module.exports = 'Paris'

@@ -45,8 +45,10 @@ module.exports = function(res, current_city){
                 fs.read(fd, buffer, bytesRead, chunkSize, bytesRead);
                 bytesRead += chunkSize;
             }
-            console.log(buffer.toString('utf8', 0, bufferSize));
-            fs.close(fd);
+            //console.log(buffer.toString('utf8', 0, bufferSize));
+            fs.closeSync(fd, function(err){
+                console.log('fs close error: ' + err)
+            });
             res.json(JSON.parse(buffer));
         });
     });

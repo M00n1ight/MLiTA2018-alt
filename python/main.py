@@ -1,12 +1,12 @@
 import socket
 import classes.Graph as Gr
 import AlgoChooser as Chooser
-import alt
+# import alt
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 8081))
 
-current_city = 'SPb3'
+current_city = 'Paris'
 print('Current city: ' + current_city)
 
 graph = Gr.Graph()
