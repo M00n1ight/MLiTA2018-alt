@@ -29,7 +29,7 @@ Node.prototype.toJSON = function(){
      return {
         nodeId: this.id,
         nodeLon: this.lon,
-        nodeLat: this.lan,
+        nodeLat: this.lat,
     }
 };
 

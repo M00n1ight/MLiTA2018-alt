@@ -25,13 +25,13 @@ let testCounter = 0;
 //         .on('end', done);
 // };
 
-module.exports = function(res){
+module.exports = function(res, current_city){
     graphLoad.on('loaded', ()=>{
         console.log('GRAPHLOAD EMITTED');
         res.json(graph.toViewJSON());
         console.log('JSON Done');
     });
-    fs.open('extract-roads-master/maps/SPb3_bin', 'r', function(err, fd) {
+    fs.open('extract-roads-master/maps/'+ current_city + '_bin', 'r', function(err, fd) {
         fs.fstat(fd, function(err, stats) {
             var bufferSize=stats.size,
                 chunkSize=512,

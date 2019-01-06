@@ -12,15 +12,15 @@ let Edge = require('./../classes/edge');
 let graph = new Graph;
 let testCounter = 0;
 
-console.log('start')
-readMap()
+console.log('start');
+readMap();
 
 function readMap(){
     fs.createReadStream('export.json', {encoding: 'utf8'})
         .pipe(JSONStream.parse('elements.*'))
         .pipe(es.mapSync(callback))
         .on('end', done);
-};
+}
 
 function callback(el) {
     testCounter++;
@@ -33,7 +33,7 @@ function done() {
     console.log('file read');
     const buffer = Buffer.from(JSON.stringify(graph.toViewJSON()));
     //console.log(buffer)
-    fs.open('maps/SPb3_bin', 'w', function(err, fd){
+    fs.open('maps/Montreal_bin', 'w', function(err, fd){
     	if (err){
     		throw 'error opening file';
     	}
@@ -42,7 +42,7 @@ function done() {
     		if (err) throw 'error writing file';
     		fs.close(fd, function(){
     			console.log('file written');
-    			fs.open('maps/SPb3_bin', 'r', function(err, fd) {
+    			fs.open('maps/Montreal_bin', 'r', function(err, fd) {
 				    fs.fstat(fd, function(err, stats) {
 				        var bufferSize=stats.size,
 				            chunkSize=1024,
