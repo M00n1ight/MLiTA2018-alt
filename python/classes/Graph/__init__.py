@@ -37,6 +37,22 @@ class Graph:
         os.system('cls')
         print('Graph is read')
 
+    def read_graph_from_csv_by_path(self, path_nodes, path_roads):
+        self.nodes, self.edges = dict(), list()
+        os.system('cls')
+        print('reading nodes')
+        self.__read_nodes(pd.read_csv(path_nodes))
+        os.system('cls')
+        print('nodes done')
+        print('reading roads')
+        self.__read_roads(pd.read_csv(path_roads))
+        os.system('cls')
+        print('nodes done')
+        print('edges done')
+        self.normalize()
+        os.system('cls')
+        print('Graph is read')
+
     # тут _read_nodes_alt
     def read_graph_from_csv_alt(self, file_name_nodes, file_name_roads):
         self.nodes, self.edges = dict(), list()

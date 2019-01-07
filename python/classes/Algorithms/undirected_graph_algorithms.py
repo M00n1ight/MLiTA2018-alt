@@ -377,7 +377,7 @@ def astar_un(graph, node_from, node_to):
     is_node_done = dict()
 
     # Ищем расстояния до точек
-    while queue:
+    while not queue.empty():
 
         # Поиск минимального (по расстоянию) элемента
         current_node = queue.get()[0]

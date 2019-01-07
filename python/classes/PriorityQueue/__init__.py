@@ -22,6 +22,7 @@ class PriorityQueueByDict:
             elif prior > value:
                 item = key
                 prior = value
+
         self.__queue.pop(item)
         return item, prior
 
