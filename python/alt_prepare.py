@@ -3,9 +3,11 @@ import classes.Algorithms as Algs
 import random as rnd
 import pandas as pd
 
+city = 'NY'
+
 gr = Gr.Graph()
 print('read graph')
-gr.read_graph_from_csv('Paris_nodes.csv', 'Paris_roads.csv')
+gr.read_graph_from_csv(city + '_nodes.csv', city + '_roads.csv')
 
 print('init ALT')
 
@@ -41,5 +43,5 @@ nodes = {'id' : ids, 'lon' : x, 'lat' : y, 'dists' : dist_to_mark}
 nodes_df = pd.DataFrame(nodes)
 
 print('convert to csv')
-nodes_df.to_csv('maps/Paris_nodes_alt.csv', index = False)
+nodes_df.to_csv('maps/'+city+'_nodes_alt.csv', index = False)
 print('nodes done')

@@ -156,8 +156,8 @@ def bidirectional_dijkstra_un_p(graph, node_from, node_to):
 
     time_start = time.time()
 
-    t_forward.join()
-    t_backward.join()
+    t_forward.join(timeout=0)
+    t_backward.join(timeout=0)
 
     while not t_fw_done and not t_bw_done:
         pass

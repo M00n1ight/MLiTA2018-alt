@@ -137,6 +137,7 @@ class Graph:
     def __read_roads(self, roads):
         counter = 1
         count = len(roads.index)
+        print('Roads: ' + str(count))
         for (ind, row) in roads.iterrows():
             if counter % 10000 == 0:
                 print(int(counter / count * 100), '%')
@@ -151,6 +152,7 @@ class Graph:
     # оно читает новый столбец в csv
     def __read_nodes_alt(self, nodes):
         count = len(nodes.index)
+        print('Nodes: ' + str(count))
         counter = 1
         for (ind, row) in nodes.iterrows():
             if counter % 10000 == 0:

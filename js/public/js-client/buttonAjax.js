@@ -3,11 +3,14 @@ let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 let isGraphDrawn = false;
 let isSvgDrawn = false;
 let graph = undefined;
+let current_city_id = undefined;
 
 buttonStart.onclick = function(){
     console.log('BUTTON CLICKED');
     let cnv = document.getElementById('canvas');
     let menu = document.getElementById('menu');
+    let start_menu = document.getElementById('start_menu');
+    let city_pre_chooser = document.getElementById('city_chooser');
     menu.style.display = 'flex';
     // for(let i = 0; i < zoomButtons.length; i++){
     //     zoomButtons[i].hidden = false;
@@ -15,10 +18,12 @@ buttonStart.onclick = function(){
 
     cnv.hidden = false;
     resizeCanvasFS();
-    buttonStart.hidden = true;
+    start_menu.hidden = true;
+    current_city_id = city_pre_chooser.options[city_pre_chooser.selectedIndex].value;
+    menu.appendChild(city_pre_chooser);
 
     $.ajax({
-        url: '/ajax/getGraph',
+        url: `/ajax/getGraph?city=${current_city_id}`,
         success: function(g){
             console.log('AJAX SUCCEED');
 

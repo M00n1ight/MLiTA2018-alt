@@ -1,5 +1,4 @@
 const express = require('express');
-let current_city = require('./current_city');
 
 const app = express();
 const port = 8080;
@@ -7,15 +6,15 @@ const port = 8080;
 app.use(express.static('public'));
 
 app.get('/', function(req,res){
-    console.log('REQUEST' + req.headers);
+    console.log('REQUEST TO /');
     //delete require.cache[require.resolve(__dirname + '/html/graph.html')];
     res.sendFile(__dirname + '/html/graph.html');
 });
 
 app.get('/ajax/getGraph', function(req,res){
     delete require.cache[require.resolve('./extract-roads-master/parser')];
-    //delete require.cache[require.resolve('./current_city')];
-    require('./extract-roads-master/parser')(res, current_city);
+    let city_from_client = req.query.city;
+    require('./extract-roads-master/parser')(res, city_from_client);
 });
 
 app.get('/ajax/calculatePath', function(req, res){
@@ -46,5 +45,5 @@ app.listen(port, (err)=>{
     if (err){
         console.log(err)
     }
-    console.log(`Current city: ${current_city}\nServer is on ${port}`);
+    console.log(`Server is on ${port}`);
 });

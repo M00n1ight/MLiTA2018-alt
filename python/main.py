@@ -6,7 +6,7 @@ import AlgoChooser as Chooser
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 8081))
 
-current_city = 'Paris'
+current_city = 'Toronto'
 print('Current city: ' + current_city)
 
 graph = Gr.Graph()

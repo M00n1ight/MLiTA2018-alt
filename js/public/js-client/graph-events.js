@@ -136,6 +136,16 @@ buttonUnscale.addEventListener('click', function(event){
     reDrawSvg();
 });
 
+let buttonSwapPoints = document.getElementById('swap_points');
+buttonSwapPoints.addEventListener('click', function(event){
+    if (pointFrom && pointTo){
+        let copy = pointFrom;
+        pointFrom = pointTo;
+        pointTo = copy;
+        reDrawSvg()
+    }
+});
+
 let buttonClearPoints = document.getElementById('clear_points');
 buttonClearPoints.addEventListener('click', function(event){
     isPath = false;

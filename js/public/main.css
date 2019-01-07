@@ -15,9 +15,7 @@ canvas {
     width: 100px;
     max-width: 100px;
     height: 50px;
-    border-radius: 20px;
-    padding-top:20px;
-    background-color: blue;
+    margin-bottom:20px;
     text-align: center;
     cursor: pointer;
 }
@@ -29,6 +27,7 @@ canvas {
     position: absolute;
     left:20px;
     top:30px;
+    pointer-events: none;
 }
 
 .container-buttons {
@@ -37,6 +36,7 @@ canvas {
     border-radius: 3px;
     padding: 0;
     margin-right: 10px;
+    pointer-events: all;
 }
 
 .ui_button {
@@ -59,11 +59,11 @@ select{
     margin: 5px 6px 5px 6px;
     border-radius: 3px;
     background-color: whitesmoke;
-    width: 100%;
     z-index: 999;
     text-align: center;
     cursor: pointer;
     font-size: 16px;
+    pointer-events: all;
 }
 
 svg{
