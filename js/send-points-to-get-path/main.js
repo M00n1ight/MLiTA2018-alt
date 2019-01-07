@@ -10,7 +10,7 @@ module.exports = function(res, points){
                 console.log('Connected!');
                 let str = points.from.lon + ' ' + points.from.lat + ' '
                     + points.to.lon + ' ' + points.to.lat + ' ' + points.algo;
-                console.log(str);
+                //console.log(str);
                 client.write(str, 'utf-8', function () {
                     console.log('Sent: ' + str)
                 });
@@ -21,7 +21,7 @@ module.exports = function(res, points){
         });
 
         client.on('data', function (data) {
-            console.log('Received: ' + data);
+            //console.log('Received: ' + data);
             client.destroy();
 
             let data_f = data.toString().split(' ');
@@ -40,7 +40,7 @@ module.exports = function(res, points){
                 })
             }
 
-            console.log(formatted_data);
+            //console.log(formatted_data);
 
             res.json(formatted_data);
         });

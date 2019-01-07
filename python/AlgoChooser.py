@@ -21,7 +21,7 @@ algorithms.append(Algs.alt_by_ids)
 algorithms.append(Algs.bidirectional_dijkstra_un_p_by_ids)
 
 # Test algs
-algorithms.append(Algs.test)
+# algorithms.append(Algs.test)
 
 def get_algorithm_by_id(alg_id):
     if alg_id < len(algorithms):

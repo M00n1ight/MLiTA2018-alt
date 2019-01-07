@@ -26,11 +26,6 @@ let testCounter = 0;
 // };
 
 module.exports = function(res, current_city){
-    graphLoad.on('loaded', ()=>{
-        console.log('GRAPHLOAD EMITTED');
-        res.json(graph.toViewJSON());
-        console.log('JSON Done');
-    });
     fs.open('extract-roads-master/maps/'+ current_city + '_bin', 'r', function(err, fd) {
         fs.fstat(fd, function(err, stats) {
             var bufferSize=stats.size,
