@@ -32,10 +32,10 @@ while True:
             raise RuntimeError("socket conn broke")
         if data1:
             points = [float(x) for x in data1.decode('utf-8').split()]
-            algorithm = Chooser.get_algorithm_by_id(int(points[4]))
+            algorithm, algorithm_name = Chooser.get_algorithm_by_id(int(points[4]))
             # print(points)
             print('--------------------------------------')
-            print('Chosen algorithm id: {}'.format(points[4]))
+            print('Chosen algorithm: {}\nChosen algorithm id: {}'.format(algorithm_name, points[4]))
             print('Calculating path')
 
             dist, paths, time = algorithm(
