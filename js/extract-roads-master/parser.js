@@ -28,9 +28,9 @@ let testCounter = 0;
 module.exports = function(res, current_city){
     fs.open('extract-roads-master/maps/'+ current_city + '_bin', 'r', function(err, fd) {
         fs.fstat(fd, function(err, stats) {
-            var bufferSize=stats.size,
-                chunkSize=512,
-                buffer=new Buffer(bufferSize),
+            var bufferSize = stats.size,
+                chunkSize = 512,
+                buffer = Buffer.alloc(bufferSize),
                 bytesRead = 0;
 
             while (bytesRead < bufferSize) {

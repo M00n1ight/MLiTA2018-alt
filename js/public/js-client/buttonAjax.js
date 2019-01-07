@@ -21,6 +21,7 @@ buttonStart.onclick = function(){
     start_menu.hidden = true;
     current_city_id = city_pre_chooser.options[city_pre_chooser.selectedIndex].value;
     menu.appendChild(city_pre_chooser);
+    city_chooser.disabled = true;
 
     $.ajax({
         url: `/ajax/getGraph?city=${current_city_id}`,
@@ -36,6 +37,8 @@ buttonStart.onclick = function(){
             document.body.insertBefore(svg, cnv);
 
             reDrawSvg();
+
+            enableButtons();
 
             isSvgDrawn = true;
             isGraphDrawn = true;

@@ -12,22 +12,22 @@
         <button class="button-start" id="startButton">START</button>
         <select id="city_chooser">
             <option value="SPb3">Saint Petersburg (103k nodes)</option>
-            <option value="Moscow">Moscow</option>
-            <option value="Paris">Paris</option>
+            <option value="Moscow">Moscow (120k nodes)</option>
+            <option value="Paris">Paris (150k nodes)</option>
             <option value="London">London (175k nodes)</option>
             <option value="NY">New York (168k nodes)</option>
-            <option value="Toronto">Toronto</option>
+            <option value="Toronto">Toronto (103k nodes)</option>
         </select>
     </div>
     <canvas id="canvas" style="border: 1px solid black" hidden="hidden"></canvas>
     <div id="menu" hidden="hidden">
         <div id="container-buttons" class="container-buttons">
-            <button id="find_path" hidden="hidden" class="ui_button" style="top: 170px">Find the path</button>
-            <button id="swap_points" hidden="hidden" class="ui_button" style="top: 70px">Swap points</button>
-            <button id="clear_points" hidden="hidden" class="ui_button" style="top: 70px">Clear points</button>
-            <button id="scale" hidden="hidden" class="ui_button" style="top: 10px">+</button>
-            <button id="unscale" hidden="hidden" class="ui_button" style="top: 40px">-</button>
-            <button id="find_nodes" hidden="hidden" class="ui_button" style="top: 120px">Find the nodes</button>
+            <button id="find_path" hidden="hidden" class="ui_button" disabled="disabled" style="top: 170px">Find the path</button>
+            <button id="swap_points" hidden="hidden" class="ui_button" disabled="disabled" style="top: 70px">Swap points</button>
+            <button id="clear_points" hidden="hidden" class="ui_button" disabled="disabled" style="top: 70px">Clear points</button>
+            <button id="scale" hidden="hidden" class="ui_button" disabled="disabled" style="top: 10px">+</button>
+            <button id="unscale" hidden="hidden" class="ui_button" disabled="disabled" style="top: 40px">-</button>
+            <button id="find_nodes" hidden="hidden" class="ui_button" disabled="disabled" style="top: 120px">Find the nodes</button>
         </div>
 
         <select id="select_alg">
@@ -57,6 +57,7 @@
     <script src="/js-client/graph-shader-compiler.js"></script>
     <script src="/js-client/canvas-full-screen.js"></script>
     <script src="/js-client/graph-events.js"></script>
+    <script src="/js-client/buttons_enable_disable.js"></script>
     <script id="2d-vertex-shader" type="notjs">
         attribute vec2 a_position;
 
