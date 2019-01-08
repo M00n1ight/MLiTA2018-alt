@@ -17,8 +17,8 @@ Available cities as typing at *city*:
 5*) Moscow
 6**) NY
 
-* - badly connected graph (because of following issues)
-** - very badly connected graph (because of following issues)
+\* - badly connected graph (because of following issues)
+\** - very badly connected graph (because of following issues)
 
 Note v1.0: That cities were fetched from the OSM Service as raw responds, therefore graphs we got ain't perfect because all the graphs AIN'T CONNECTED, for example most of the bridges on the maps is NOT CONNECTED WITH THE REST GRAPH. It's the reason why algorithms says "NO WAY" or gives a visually bad path sometimes. Also because of that reason VISUAL EXPERIENCE MAY NOT BE THE SAME WITH REAL GRAPH AS IT KEEPS IN MEMORY. To check correctness of any algorithm, use "Dijkstra" or better "Dijkstra with early stop" algorithms.
 
