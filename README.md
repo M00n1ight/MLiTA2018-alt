@@ -6,7 +6,7 @@ Requirements:
 
 Dancing with a timbrel:
 1) Run "nodejs index.js" from "js" directory
-2) Run "python3 main.py *city*" from "python" directory
+2) Run "python3 main.py \*city\*" from "python" directory
 3) Go to 'localhost:8080"
 
 Available cities as typing at *city*:
