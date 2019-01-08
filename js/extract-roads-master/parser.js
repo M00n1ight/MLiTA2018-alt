@@ -26,55 +26,35 @@ let testCounter = 0;
 // };
 
 module.exports = function(res, current_city){
-    fs.open('extract-roads-master/maps/'+ current_city + '_bin', 'r', function(err, fd) {
-        fs.fstat(fd, function(err, stats) {
-            // let bufferSize = stats.size,
-            //     chunkSize = 512,
-            //     buffer = Buffer.alloc(bufferSize),
-            //     bytesRead = 0;
-            //
-            // let counter = 0;
-            // let str = '';
-            //
-            // while (bytesRead < bufferSize) {
-            //     if ((bytesRead + chunkSize) > bufferSize) {
-            //         chunkSize = (bufferSize - bytesRead);
-            //     }
-            //     fs.read(fd, buffer, bytesRead, chunkSize, bytesRead, function(a,b,c){
-            //         //console.log('---\nRead callback ' + counter);
-            //         //counter += 1;
-            //         // str += '\nRead: ' + bytesRead + '\nChunk: ' + chunkSize + '\nSize: ' + bufferSize;
-            //         // console.log('\nRead: ' + bytesRead + '\nChunk: ' + chunkSize + '\nSize: ' + bufferSize)
-            //         // if (bytesRead + chunkSize < bufferSize)
-            //         //     console.log('Less')
-            //     });
-            //     console.log('\nRead: ' + bytesRead + '\nChunk: ' + chunkSize + '\nSize: ' + bufferSize);
-            //     bytesRead += chunkSize;
-            // }
+    // fs.open('extract-roads-master/maps/'+ current_city + '_bin', 'r', function(err, fd) {
+    //     fs.fstat(fd, function(err, stats) {
+    //         let bufferSize = stats.size,
+    //             chunkSize = 1024,
+    //             buffer = Buffer.allocUnsafe(bufferSize),
+    //             bytesRead = 0;
 
-            let bufferSize = stats.size,
-                chunkSize = 512,
-                buffer = Buffer.alloc(bufferSize),
-                bytesRead = 0;
+    //         let counter = 0;
+    //         let str = '';
 
-            let counter = 0;
-            let str = '';
+    //         while (bytesRead < bufferSize) {
+    //             if ((bytesRead + chunkSize) > bufferSize) {
+    //                 chunkSize = (bufferSize - bytesRead);
+    //             }
+    //             fs.read(fd, buffer, bytesRead, chunkSize, bytesRead);
+    //             bytesRead += chunkSize;
+    //         }
 
-            while (bytesRead < bufferSize) {
-                if ((bytesRead + chunkSize) > bufferSize) {
-                    chunkSize = (bufferSize - bytesRead);
-                }
-                fs.read(fd, buffer, bytesRead, chunkSize, bytesRead);
-                bytesRead += chunkSize;
-            }
+    //         //console.log('last chunk is ' + chunkSize);
+    //         fs.close(fd, function(err){
+    //             let json = JSON.parse(buffer.toString().trim());
+    //             res.json(json);
+    //         });
+    //     });
+    // });
 
-            console.log('last chunk is ' + chunkSize);
-            fs.close(fd, function(err){
-                let json = JSON.parse(buffer.toString().replace(/\0/g, ""));
-                res.json(json);
-            });
-        });
-    });
+    fs.readFile('extract-roads-master/maps/'+ current_city + '_bin', {encoding: 'utf8', flag: 'r'}, function(err, data){
+    	res.json(JSON.parse(data));
+    })
 };
 
 function callback(el) {
