@@ -377,5 +377,5 @@ canvas.addEventListener('click', function(event){
         }
     }
     reDrawSvg();
-    isAbleToPoint = true;
+    //isAbleToPoint = true;
 });

@@ -18,7 +18,9 @@ function changeMap(city){
             isGraphDrawn = true;
             graph = g;
 
-            enableButtons()
+            enableButtons();
+
+            isAbleToPoint = true;
         }
     })
 }
@@ -26,6 +28,11 @@ function changeMap(city){
 let city_chooser = document.getElementById('city_chooser');
 city_chooser.addEventListener('change', function(event){
     if (graph) {
+        isAbleToPoint = false;
+        buttonClearPoints.click();
+        scale = 1;
+        currentOffsety = 0;
+        currentOffsetx = 0;
         disableButtons();
         let city = city_chooser.options[city_chooser.selectedIndex].value;
         console.log('City changed to ' + city);

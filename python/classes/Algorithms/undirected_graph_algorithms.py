@@ -752,16 +752,13 @@ def bidirectional_alt(graph, node_from, node_to):
     #              math.sqrt(math.pow((nf.x - s.x), 2) + math.pow((nf.y - s.y), 2))
     #     return result / 2
 
-    def heuristic(nf, t, s):
+    def heuristic(nf, t):
         result = -1
         for i in range(16):
             temp = abs(nf.dist_to_mark[i] - t.dist_to_mark[i])
-            temp2 = abs(nf.dist_to_mark[i] - s.dist_to_mark[i])
-            if temp > result or temp2 > result:
-                if temp2 >= temp:
-                    result = temp2
-                else:
-                    result = temp
+            # temp2 = abs(nf.dist_to_mark[i] - s.dist_to_mark[i])
+            if temp > result :
+                result = temp
         return result
 
     time_start = time.time()
@@ -801,12 +798,12 @@ def bidirectional_alt(graph, node_from, node_to):
                 if not covering_fw.get(edge.n_to, False) and dists_fw[edge.n_to.id] == -1 or dists_fw[edge.n_to.id] > dists_fw[current_node.id] + edge.get_weight():
                     dists_fw[edge.n_to.id] = dists_fw[current_node.id] + edge.get_weight()
                     edge_to_fw.update({edge.n_to: edge})
-                    queue_fw.update(edge.n_to, dists_fw[edge.n_to.id] + heuristic(edge.n_to, node_to, node_from))
+                    queue_fw.update(edge.n_to, dists_fw[edge.n_to.id] + heuristic(edge.n_to, node_to))
             else:
                 if not covering_fw.get(edge.n_from, False) and dists_fw[edge.n_from.id] == -1 or dists_fw[edge.n_from.id] > dists_fw[current_node.id] + edge.get_weight():
                     dists_fw[edge.n_from.id] = dists_fw[current_node.id] + edge.get_weight()
                     edge_to_fw.update({edge.n_from: edge})
-                    queue_fw.update(edge.n_from, dists_fw[edge.n_from.id] + heuristic(edge.n_from, node_to, node_from))
+                    queue_fw.update(edge.n_from, dists_fw[edge.n_from.id] + heuristic(edge.n_from, node_to))
 
 
         # Backward step
@@ -823,12 +820,12 @@ def bidirectional_alt(graph, node_from, node_to):
                 if not covering_bw.get(edge.n_from, False) and dists_bw[edge.n_from.id] == -1 or dists_bw[edge.n_from.id] > dists_bw[current_node.id] + edge.get_weight():
                     dists_bw[edge.n_from.id] = dists_bw[current_node.id] + edge.get_weight()
                     edge_to_bw.update({edge.n_from: edge})
-                    queue_bw.update(edge.n_from, dists_bw[edge.n_from.id] + heuristic(edge.n_from, node_to, node_from))
+                    queue_bw.update(edge.n_from, dists_bw[edge.n_from.id] + heuristic(edge.n_from, node_from))
             else:
                 if not covering_bw.get(edge.n_to, False) and dists_bw[edge.n_to.id] == -1 or dists_bw[edge.n_to.id] > dists_bw[current_node.id] + edge.get_weight():
                     dists_bw[edge.n_to.id] = dists_bw[current_node.id] + edge.get_weight()
                     edge_to_bw.update({edge.n_to: edge})
-                    queue_bw.update(edge.n_to, dists_bw[edge.n_to.id] + heuristic(edge.n_to, node_to, node_from))
+                    queue_bw.update(edge.n_to, dists_bw[edge.n_to.id] + heuristic(edge.n_to, node_from))
 
     if center is None:
         return -1, [], -1

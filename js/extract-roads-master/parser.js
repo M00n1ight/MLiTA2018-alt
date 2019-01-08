@@ -28,10 +28,37 @@ let testCounter = 0;
 module.exports = function(res, current_city){
     fs.open('extract-roads-master/maps/'+ current_city + '_bin', 'r', function(err, fd) {
         fs.fstat(fd, function(err, stats) {
-            var bufferSize = stats.size,
+            // let bufferSize = stats.size,
+            //     chunkSize = 512,
+            //     buffer = Buffer.alloc(bufferSize),
+            //     bytesRead = 0;
+            //
+            // let counter = 0;
+            // let str = '';
+            //
+            // while (bytesRead < bufferSize) {
+            //     if ((bytesRead + chunkSize) > bufferSize) {
+            //         chunkSize = (bufferSize - bytesRead);
+            //     }
+            //     fs.read(fd, buffer, bytesRead, chunkSize, bytesRead, function(a,b,c){
+            //         //console.log('---\nRead callback ' + counter);
+            //         //counter += 1;
+            //         // str += '\nRead: ' + bytesRead + '\nChunk: ' + chunkSize + '\nSize: ' + bufferSize;
+            //         // console.log('\nRead: ' + bytesRead + '\nChunk: ' + chunkSize + '\nSize: ' + bufferSize)
+            //         // if (bytesRead + chunkSize < bufferSize)
+            //         //     console.log('Less')
+            //     });
+            //     console.log('\nRead: ' + bytesRead + '\nChunk: ' + chunkSize + '\nSize: ' + bufferSize);
+            //     bytesRead += chunkSize;
+            // }
+
+            let bufferSize = stats.size,
                 chunkSize = 512,
                 buffer = Buffer.alloc(bufferSize),
                 bytesRead = 0;
+
+            let counter = 0;
+            let str = '';
 
             while (bytesRead < bufferSize) {
                 if ((bytesRead + chunkSize) > bufferSize) {
@@ -40,10 +67,11 @@ module.exports = function(res, current_city){
                 fs.read(fd, buffer, bytesRead, chunkSize, bytesRead);
                 bytesRead += chunkSize;
             }
-            //console.log(buffer.toString('utf8', 0, bufferSize));
+
+            console.log('last chunk is ' + chunkSize);
             fs.close(fd, function(err){
-                //console.log('fs close error: ' + err);
-                res.json(JSON.parse(buffer));
+                let json = JSON.parse(buffer.toString().replace(/\0/g, ""));
+                res.json(json);
             });
         });
     });
