@@ -35,6 +35,13 @@ canvas.addEventListener('mouseup', function(event){
     isMouseDown = false;
     if (isMouseMoved){
         isMouseMoved = false;
+
+        //to make it at the next tick of eventloop
+        //to not set the point after mouseup->click
+        setTimeout(function(){
+            isAbleToPoint = true;
+        }, 0);
+
         currentOffsetx = (currentOffsetx + 2 * moveOffsetx);
         currentOffsety = (currentOffsety + 2 * moveOffsety);
         svgPrevOffsetx = 0;
@@ -81,6 +88,28 @@ canvas.addEventListener('mousemove', function(event){
         return fromClickXYToShaderXY(result.x, result.y);
     }
 });
+
+canvas.addEventListener('mouseleave', function (event) {
+    //console.log(event.relatedTarget.tagName);
+    if (isMouseMoved &&
+            event.relatedTarget !== null &&
+            event.relatedTarget.tagName !== 'BUTTON' &&
+            event.relatedTarget.tagName !== 'DIV' &&
+            event.relatedTarget.tagName !== 'SELECT') {
+        canvas.dispatchEvent(new Event('mouseup'));
+    }
+});
+
+// document.body.addEventListener('mousemove', function(event){
+//     //console.log(event.target.tagName);
+//     if (isMouseMoved && (
+//         event.target.tagName === 'SELECT' ||
+//         event.target.tagName === 'BUTTON' ||
+//         event.target.tagName === 'DIV'))
+//     {
+//         canvas.dispatchEvent(new Event('mousemove'));
+//     }
+// });
 
 //SCALING
 let scale = 1;
@@ -147,6 +176,11 @@ buttonSwapPoints.addEventListener('click', function(event){
 });
 
 let buttonClearPoints = document.getElementById('clear_points');
+// buttonClearPoints.addEventListener('mousemove', function(event){
+//     event.preventDefault();
+//     event.stopPropagation();
+//     return false;
+// });
 buttonClearPoints.addEventListener('click', function(event){
     isPath = false;
 

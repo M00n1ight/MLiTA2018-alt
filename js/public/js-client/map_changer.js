@@ -29,6 +29,7 @@ let city_chooser = document.getElementById('city_chooser');
 city_chooser.addEventListener('change', function(event){
     if (graph) {
         isAbleToPoint = false;
+        console.log('Cant point');
         buttonClearPoints.click();
         scale = 1;
         currentOffsety = 0;

@@ -70,8 +70,11 @@ function reDrawGraph(graph, offsetx, offsety, scale){
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(linesCoords), gl.STATIC_DRAW);
 
     //RENDERER DEFAULTS
+    let r = 13/255,
+    	g = 13/255,
+    	b = 13/225;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0,0,0,1);
+    gl.clearColor(r, g, b, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.useProgram(program);
