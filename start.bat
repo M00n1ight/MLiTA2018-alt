@@ -2,7 +2,7 @@
 @start cmd /k node index.js
 @echo London, Paris, SPb3, Toronto
 @echo.
-@set /p city="Choise the city: "
+@set /p city="Choose the city: "
 @cd ..\
 @cd .\python
 @explorer http://localhost:8080
