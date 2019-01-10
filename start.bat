@@ -1,3 +1,4 @@
+@pip install pandas
 @cd .\js
 @start cmd /k node index.js
 @echo London, Paris, SPb3, Toronto
