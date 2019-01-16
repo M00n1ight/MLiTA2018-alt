@@ -5,6 +5,7 @@ module.exports = function(res, points){
         let client = new net.Socket();
         client.setEncoding('utf-8');
         client.setTimeout(15000);
+
         client.connect(8081, 'localhost', function () {
             try {
                 console.log('Connected!');
@@ -20,10 +21,13 @@ module.exports = function(res, points){
             }
         });
 
-        client.on('data', function (data) {
-            //console.log('Received: ' + data);
-            client.destroy();
+        client.on('end', function(){
+            console.log('The end')
+        });
 
+        client.on('data', function (data) {
+            console.log('Read: ' + client.bytesRead);
+            //client.destroy();
             let data_f = data.toString().split(' ');
             console.log('Got ' + data.length + ' bytes');
 
