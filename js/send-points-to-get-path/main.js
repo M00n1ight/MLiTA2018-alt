@@ -3,6 +3,7 @@ module.exports = function(res, points){
 
     try {
         let client = new net.Socket();
+        let fullData = '';
         client.setEncoding('utf-8');
         client.setTimeout(15000);
 
@@ -22,14 +23,10 @@ module.exports = function(res, points){
         });
 
         client.on('end', function(){
-            console.log('The end')
-        });
-
-        client.on('data', function (data) {
             console.log('Read: ' + client.bytesRead);
             //client.destroy();
-            let data_f = data.toString().split(' ');
-            console.log('Got ' + data.length + ' bytes');
+            let data_f = fullData.toString().split(' ');
+            console.log('Got ' + fullData.length + ' bytes');
 
             let formatted_data = {};
 
@@ -47,6 +44,11 @@ module.exports = function(res, points){
             //console.log(formatted_data);
 
             res.json(formatted_data);
+            console.log('The end')
+        });
+
+        client.on('data', function (data) {
+            fullData += data;
         });
 
         client.on('timeout', function () {
