@@ -56,8 +56,8 @@ while True:
                     path_f += '{} {} '.format(i.x, i.y)
                 path_f += str(time)
                 print('Send time: {}'.format(time))
-                conn.send(path_f.encode('utf-8'))
-                print('Data sent!')
+                size = conn.send(path_f.encode('utf-8'))
+                print('Data sent! {} bytes'.format(size))
 
             print('--------------------------------------')
 
@@ -78,5 +78,6 @@ while True:
     #     conn.send(b'Unknown error')
 
     finally:
+        print('finally')
         conn.close()
 

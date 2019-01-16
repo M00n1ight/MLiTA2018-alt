@@ -4,7 +4,7 @@ module.exports = function(res, points){
     try {
         let client = new net.Socket();
         client.setEncoding('utf-8');
-        client.setTimeout(13000);
+        client.setTimeout(15000);
         client.connect(8081, 'localhost', function () {
             try {
                 console.log('Connected!');
@@ -25,7 +25,7 @@ module.exports = function(res, points){
             client.destroy();
 
             let data_f = data.toString().split(' ');
-            //console.log(data_f.length);
+            console.log('Got ' + data.length + ' bytes');
 
             let formatted_data = {};
 
