@@ -24,9 +24,8 @@ module.exports = function(res, points){
 
         client.on('end', function(){
             console.log('Read: ' + client.bytesRead);
-            //client.destroy();
+            client.destroy();
             let data_f = fullData.toString().split(' ');
-            console.log('Got ' + fullData.length + ' bytes');
 
             let formatted_data = {};
 

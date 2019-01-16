@@ -261,6 +261,7 @@ def bidirectional_dijkstra_un(graph, node_from, node_to):
     queue_bw.update(node_to)
 
     center = None
+    centers_amount = 0
 
     while not queue_fw.empty() and not queue_bw.empty():
 
@@ -269,8 +270,11 @@ def bidirectional_dijkstra_un(graph, node_from, node_to):
         covering_fw[current_node] = True
 
         if covering_bw.get(current_node, False):
-            center = current_node
-            break
+            if center is None or dists_fw[current_node.id] + dists_bw[current_node.id] < dists_fw[center.id] + dists_bw[center.id]:
+                center = current_node
+            centers_amount += 1
+            if centers_amount > 20:
+                break
 
         # next_edges = [x for x in current_node.incidentEdges if x.n_from == current_node]
         for edge in current_node.incidentEdges:
@@ -291,8 +295,11 @@ def bidirectional_dijkstra_un(graph, node_from, node_to):
         covering_bw[current_node] = True
 
         if covering_fw.get(current_node, False):
-            center = current_node
-            break
+            if center is None or dists_fw[current_node.id] + dists_bw[current_node.id] < dists_fw[center.id] + dists_bw[center.id]:
+                center = current_node
+            centers_amount += 1
+            if centers_amount > 20:
+                break
 
         # next_edges = [x for x in current_node.incidentEdges if x.n_to == current_node]
         for edge in current_node.incidentEdges:
@@ -489,6 +496,7 @@ def bidirectional_astar_un(graph, node_from, node_to):
     queue_bw.update(node_to)
 
     center = None
+    centers_amount = 0
 
     while not queue_fw.empty() and not queue_bw.empty():
 
@@ -497,8 +505,11 @@ def bidirectional_astar_un(graph, node_from, node_to):
         covering_fw.update({current_node: True})
 
         if covering_bw.get(current_node, False):
-            center = current_node
-            break
+            if center is None or dists_fw[current_node.id] + dists_bw[current_node.id] < dists_fw[center.id] + dists_bw[center.id]:
+                center = current_node
+            centers_amount += 1
+            if centers_amount > 20:
+                break
 
         # next_edges = [x for x in current_node.incidentEdges if x.n_from == current_node]
         for edge in current_node.incidentEdges:
@@ -519,8 +530,11 @@ def bidirectional_astar_un(graph, node_from, node_to):
         covering_bw.update({current_node: True})
 
         if covering_fw.get(current_node, False):
-            center = current_node
-            break
+            if center is None or dists_fw[current_node.id] + dists_bw[current_node.id] < dists_fw[center.id] + dists_bw[center.id]:
+                center = current_node
+            centers_amount += 1
+            if centers_amount > 20:
+                break
 
         # next_edges = [x for x in current_node.incidentEdges if x.n_to == current_node]
         for edge in current_node.incidentEdges:
@@ -752,14 +766,23 @@ def bidirectional_alt(graph, node_from, node_to):
     #              math.sqrt(math.pow((nf.x - s.x), 2) + math.pow((nf.y - s.y), 2))
     #     return result / 2
 
-    def heuristic(nf, t):
-        result = -1
+    def heuristic(nf, t, s):
+        result1 = -1
+
         for i in range(16):
-            temp = abs(nf.dist_to_mark[i] - t.dist_to_mark[i])
+            temp1 = abs(nf.dist_to_mark[i] - t.dist_to_mark[i])
             # temp2 = abs(nf.dist_to_mark[i] - s.dist_to_mark[i])
-            if temp > result :
-                result = temp
-        return result
+            if temp1 > result1:
+                result1 = temp1
+
+        result2 = -1
+        for i in range(16):
+            temp2 = abs(nf.dist_to_mark[i] - s.dist_to_mark[i])
+            # temp2 = abs(nf.dist_to_mark[i] - s.dist_to_mark[i])
+            if temp2 > result2:
+                result2 = temp2
+
+        return (result1 + result2) / 2
 
     time_start = time.time()
 
@@ -781,6 +804,7 @@ def bidirectional_alt(graph, node_from, node_to):
     queue_bw.update(node_to)
 
     center = None
+    centers_amount = 0
 
     while not queue_fw.empty() and not queue_bw.empty():
 
@@ -789,8 +813,11 @@ def bidirectional_alt(graph, node_from, node_to):
         covering_fw.update({current_node: True})
 
         if covering_bw.get(current_node, False):
-            center = current_node
-            break
+            if center is None or dists_fw[current_node.id] + dists_bw[current_node.id] < dists_fw[center.id] + dists_bw[center.id]:
+                center = current_node
+            centers_amount += 1
+            if centers_amount > 20:
+                break
 
         # next_edges = [x for x in current_node.incidentEdges if x.n_from == current_node]
         for edge in current_node.incidentEdges:
@@ -798,12 +825,12 @@ def bidirectional_alt(graph, node_from, node_to):
                 if not covering_fw.get(edge.n_to, False) and dists_fw[edge.n_to.id] == -1 or dists_fw[edge.n_to.id] > dists_fw[current_node.id] + edge.get_weight():
                     dists_fw[edge.n_to.id] = dists_fw[current_node.id] + edge.get_weight()
                     edge_to_fw.update({edge.n_to: edge})
-                    queue_fw.update(edge.n_to, dists_fw[edge.n_to.id] + heuristic(edge.n_to, node_to))
+                    queue_fw.update(edge.n_to, dists_fw[edge.n_to.id] + heuristic(edge.n_to, node_to, node_from))
             else:
                 if not covering_fw.get(edge.n_from, False) and dists_fw[edge.n_from.id] == -1 or dists_fw[edge.n_from.id] > dists_fw[current_node.id] + edge.get_weight():
                     dists_fw[edge.n_from.id] = dists_fw[current_node.id] + edge.get_weight()
                     edge_to_fw.update({edge.n_from: edge})
-                    queue_fw.update(edge.n_from, dists_fw[edge.n_from.id] + heuristic(edge.n_from, node_to))
+                    queue_fw.update(edge.n_from, dists_fw[edge.n_from.id] + heuristic(edge.n_from, node_to, node_from))
 
 
         # Backward step
@@ -811,8 +838,11 @@ def bidirectional_alt(graph, node_from, node_to):
         covering_bw.update({current_node: True})
 
         if covering_fw.get(current_node, False):
-            center = current_node
-            break
+            if center is None or dists_fw[current_node.id] + dists_bw[current_node.id] < dists_fw[center.id] + dists_bw[center.id]:
+                center = current_node
+            centers_amount += 1
+            if centers_amount > 20:
+                break
 
         # next_edges = [x for x in current_node.incidentEdges if x.n_to == current_node]
         for edge in current_node.incidentEdges:
@@ -820,12 +850,12 @@ def bidirectional_alt(graph, node_from, node_to):
                 if not covering_bw.get(edge.n_from, False) and dists_bw[edge.n_from.id] == -1 or dists_bw[edge.n_from.id] > dists_bw[current_node.id] + edge.get_weight():
                     dists_bw[edge.n_from.id] = dists_bw[current_node.id] + edge.get_weight()
                     edge_to_bw.update({edge.n_from: edge})
-                    queue_bw.update(edge.n_from, dists_bw[edge.n_from.id] + heuristic(edge.n_from, node_from))
+                    queue_bw.update(edge.n_from, dists_bw[edge.n_from.id] + heuristic(edge.n_from, node_from, node_to))
             else:
                 if not covering_bw.get(edge.n_to, False) and dists_bw[edge.n_to.id] == -1 or dists_bw[edge.n_to.id] > dists_bw[current_node.id] + edge.get_weight():
                     dists_bw[edge.n_to.id] = dists_bw[current_node.id] + edge.get_weight()
                     edge_to_bw.update({edge.n_to: edge})
-                    queue_bw.update(edge.n_to, dists_bw[edge.n_to.id] + heuristic(edge.n_to, node_from))
+                    queue_bw.update(edge.n_to, dists_bw[edge.n_to.id] + heuristic(edge.n_to, node_from, node_to))
 
     if center is None:
         return -1, [], -1
