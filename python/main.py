@@ -14,7 +14,7 @@ print('Current city: ' + current_city)
 
 graph = Gr.Graph()
 # graph.read_graph_from_csv_alt('Toronto_nodes_alt.csv', 'Toronto_roads.csv')
-graph.read_graph_from_csv_alt(current_city + '_nodes_alt.csv', current_city + '_roads.csv', file_name_shortcuts=current_city + 'shortcuts')
+graph.read_graph_from_csv_alt(current_city + '_nodes_alt.csv', current_city + '_roads.csv', file_name_shortcuts=current_city + '_shortcuts')
 print(current_city + ' done')
 
 sock.listen(20)

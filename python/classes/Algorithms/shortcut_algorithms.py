@@ -1,5 +1,5 @@
 # -------------------------------------------------------
-# Undirected algorithms with shortcuts
+# Undirected algorithms with shortcuts 1 dir
 # -------------------------------------------------------
 
 import classes
