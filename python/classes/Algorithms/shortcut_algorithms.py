@@ -135,21 +135,32 @@ def dijkstra_early_stop_way_un_sc(graph, node_from, node_to):
     # DONT FORGET TO UNPACK LAST
     if last_sc is not None:
         if last_sc_node == last_sc.n_from:
-            path_l, weight_l = last_sc.unpack_until(node_to)
-            path = path_l + path
-            length += weight_l
+            try:
+                path_l, weight_l = last_sc.unpack_until(node_to)
+                path = path_l + path
+                length += weight_l
+            except IndexError:
+                print('Warning! Not the whole path unpacked cause of Index Error')
+
         else:
-            path_l, weight_l = last_sc.unpack_until(node_to, reverse=True)
-            path = path_l[::-1] + path
-            length += weight_l
+            try:
+                path_l, weight_l = last_sc.unpack_until(node_to, reverse=True)
+                path = path_l[::-1] + path
+                length += weight_l
+            except IndexError:
+                print('Warning! Not the whole path unpacked cause of Index Error')
 
     # DONT FORGET TO UNPACK FIRST
-    if side_node == node_from_s1:
-        nodes, w = node_from.hidden_in.unpack_until(node_from)
-        path += nodes[::-1]
-    elif node_from == node_from_s2:
-        nodes, w = node_from.hidden_in.unpack_until(node_from, reverse=True)
-        path += nodes[::-1]
+    if node_from != node_from_s1 and node_from != node_from_s2:
+        nodes_s1, w1 = node_from.hidden_in.unpack_until(node_from)
+        nodes_s2, w2 = node_from.hidden_in.unpack_until(node_from, reverse=True)
+
+        if side_node == node_from_s1:
+            length += w1
+            path += nodes_s1[::-1]
+        elif node_from == node_from_s2:
+            path += nodes_s2[::-1]
+            length += w2
 
     time_end = time.time()
 
