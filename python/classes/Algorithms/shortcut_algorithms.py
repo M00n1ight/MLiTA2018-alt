@@ -147,7 +147,7 @@ def dijkstra_early_stop_way_un_sc(graph, node_from, node_to):
     if side_node == node_from_s1:
         nodes, w = node_from.hidden_in.unpack_until(node_from)
         path += nodes[::-1]
-    elif node_from != node_from_s2:
+    elif node_from == node_from_s2:
         nodes, w = node_from.hidden_in.unpack_until(node_from, reverse=True)
         path += nodes[::-1]
 
