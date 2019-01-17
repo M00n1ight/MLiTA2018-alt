@@ -21,8 +21,10 @@ algorithms.append((Algs.bidirectional_alt_by_ids, 'Bidirectional ALT_16 for undi
 # Parallel algorithms
 algorithms.append((Algs.bidirectional_dijkstra_un_p_by_ids, 'Parallel bidirectional Dijkstra for undirected map'))
 
-# Test algs
-# algorithms.append(Algs.test)
+# Shortcut algs
+algorithms.append((Algs.dijkstra_early_stop_way_un_sc_by_ids, 'Shortcut Dijkstra with early stop'))
+algorithms.append((Algs.astar_un_sc_by_ids, 'Shortcut A*'))
+algorithms.append((Algs.alt_un_sc_by_ids, 'Shortcut ALT_16'))
 
 
 def get_algorithm_by_id(alg_id):

@@ -689,6 +689,8 @@ def alt(graph, node_from, node_to, k = 16):
         if current_node == node_to:
             break
 
+        is_node_done[current_node] = True
+
         # Считаем пути до следующих вершин
         # next_edges = [x for x in current_node.incidentEdges if x.n_from == current_node]
         # next_edges = [x for x in current_node.incidentEdges]
@@ -702,7 +704,7 @@ def alt(graph, node_from, node_to, k = 16):
                     edges_to.update({x.n_to.id: [x]})
                     queue.update(x.n_to, dists[x.n_to.id] + heuristic(x.n_to, node_to))
             else:
-                if not is_node_done.get(x.n_to, False) and dists[x.n_from.id] == -1 or dists[x.n_from.id] > dists[current_node.id] + x.get_weight():
+                if not is_node_done.get(x.n_from, False) and dists[x.n_from.id] == -1 or dists[x.n_from.id] > dists[current_node.id] + x.get_weight():
                     # queue.append(x.n_to)
                     dists[x.n_from.id] = dists[current_node.id] + x.get_weight()
                     edges_to.update({x.n_from.id: [x]})
@@ -767,8 +769,8 @@ def bidirectional_alt(graph, node_from, node_to):
     #     return result / 2
 
     def heuristic(nf, t, s):
-        result1 = -1
 
+        result1 = -1
         for i in range(16):
             temp1 = abs(nf.dist_to_mark[i] - t.dist_to_mark[i])
             # temp2 = abs(nf.dist_to_mark[i] - s.dist_to_mark[i])
@@ -782,7 +784,7 @@ def bidirectional_alt(graph, node_from, node_to):
             if temp2 > result2:
                 result2 = temp2
 
-        return (result1 + result2) / 2
+        return (result1 - result2) / 2
 
     time_start = time.time()
 

@@ -4,13 +4,15 @@ import os
 
 class Graph:
 
-    def __init__(self, nodes=None, edges=None):
+    def __init__(self, nodes=None, edges=None, scs=None):
         self.nodes = nodes
         self.edges = edges
+        self.shortcuts = scs
         self.marks = list()
         if nodes is not None and edges is not None:
             self.normalize()
 
+    # normalization edges
     def normalize(self):
         if self.nodes is not None and self.edges is not None:
             counter = 0
@@ -21,18 +23,32 @@ class Graph:
                 i.n_from.incidentEdges.append(i)
                 i.n_to.incidentEdges.append(i)
 
+    # normalization shortcuts
+    def normalize_sc(self):
+        if self.nodes is not None and self.edges is not None and self.shortcuts is not None:
+            for sc in self.shortcuts:
+                sc.n_from.incidentShortcuts.append(sc)
+                sc.n_to.incidentShortcuts.append(sc)
+            for edge in self.edges:
+                if not edge.is_in_shortcut:
+                    edge.n_from.incidentShortcuts.append(edge)
+                    edge.n_to.incidentShortcuts.append(edge)
+
     def read_graph_from_csv(self, file_name_nodes, file_name_roads):
         self.nodes, self.edges = dict(), list()
         os.system('cls')
+
         print('reading nodes')
-        self.__read_nodes(pd.read_csv('maps/' + file_name_nodes))
+        self.__read_nodes(pd.read_csv('maps/nodes_alt/' + file_name_nodes))
         os.system('cls')
         print('nodes done')
+
         print('reading roads')
-        self.__read_roads(pd.read_csv('maps/' + file_name_roads))
+        self.__read_roads(pd.read_csv('maps/roads/' + file_name_roads))
         os.system('cls')
         print('nodes done')
         print('edges done')
+
         self.normalize()
         os.system('cls')
         print('Graph is read')
@@ -54,19 +70,55 @@ class Graph:
         print('Graph is read')
 
     # тут _read_nodes_alt
-    def read_graph_from_csv_alt(self, file_name_nodes, file_name_roads):
+    def read_graph_from_csv_alt(self, file_name_nodes, file_name_roads, file_name_shortcuts=None):
         self.nodes, self.edges = dict(), list()
+
         os.system('cls')
         print('reading nodes')
-        self.__read_nodes_alt(pd.read_csv('maps/' + file_name_nodes))
+        self.__read_nodes_alt(pd.read_csv('maps/nodes_alt/' + file_name_nodes))
         os.system('cls')
         print('nodes done')
+
         print('reading roads')
-        self.__read_roads(pd.read_csv('maps/' + file_name_roads))
+        self.__read_roads(pd.read_csv('maps/roads/' + file_name_roads))
         os.system('cls')
         print('nodes done')
         print('edges done')
+
+        print('normalization edges')
         self.normalize()
+        print('normalization edges done')
+
+        print('reading shortcuts')
+        self.__read_shortcuts('maps/shortcuts/' + file_name_shortcuts)
+        print('shortcuts done')
+
+        print('normalization shortcuts')
+        self.normalize_sc()
+        print('normalization shortcuts done')
+
+        os.system('cls')
+        print('Graph is read')
+
+    def read_graph_from_csv_alt_without_sc(self, file_name_nodes, file_name_roads, file_name_shortcuts=None):
+        self.nodes, self.edges = dict(), list()
+
+        os.system('cls')
+        print('reading nodes')
+        self.__read_nodes_alt(pd.read_csv('maps/nodes_alt/' + file_name_nodes))
+        os.system('cls')
+        print('nodes done')
+
+        print('reading roads')
+        self.__read_roads(pd.read_csv('maps/roads/' + file_name_roads))
+        os.system('cls')
+        print('nodes done')
+        print('edges done')
+
+        print('normalization edges')
+        self.normalize()
+        print('normalization edges done')
+
         os.system('cls')
         print('Graph is read')
 
@@ -176,3 +228,17 @@ class Graph:
             counter += 1
             self.nodes[row.id] = Node.Node(id_=row.id, x=row.lon, y=row.lat)
             self.nodes[row.id].dist_to_mark = [float(i) for i in row.dists[1:-1].split(',')]
+
+    def __read_shortcuts(self, filename):
+        self.shortcuts = list()
+        fd = open(filename, 'r')
+        for line in fd:
+            # parsed_line = [x for x in line.split(' ')]
+            # # print(parsed_line)
+            # id_array = [float(x) for x in parsed_line[:-1:]]
+            # # print(id_array)
+            # node_list = [self.nodes[x] for x in id_array]
+            node_list = [self.nodes[float(x)] for x in line.split(' ')[:-1:]]
+            shortcut = Edge.Shortcut(node_list=node_list)
+            self.shortcuts.append(shortcut)
+        fd.close()

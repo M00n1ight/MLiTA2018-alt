@@ -9,12 +9,12 @@ sock.bind(('localhost', 8081))
 if len(sys.argv) > 1:
     current_city = sys.argv[1]
 else:
-    current_city = 'Toronto'
+    current_city = 'SPb3'
 print('Current city: ' + current_city)
 
 graph = Gr.Graph()
 # graph.read_graph_from_csv_alt('Toronto_nodes_alt.csv', 'Toronto_roads.csv')
-graph.read_graph_from_csv_alt(current_city + '_nodes_alt.csv', current_city + '_roads.csv')
+graph.read_graph_from_csv_alt(current_city + '_nodes_alt.csv', current_city + '_roads.csv', file_name_shortcuts=current_city + 'shortcuts')
 print(current_city + ' done')
 
 sock.listen(20)
