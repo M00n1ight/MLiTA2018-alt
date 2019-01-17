@@ -5,11 +5,10 @@ Requirements:
 2) python3
 
 What need you do?
-1. You must have changed PATH (That is easy. When you install python, just let him do evrything for you)
-2. Run launcher_%platform%.bat
-3. Choose the city
-4. Wait
-5. Use
+1. Run launcher_%platform%
+2. Choose the city
+3. Wait for loading
+4. Enjoy
 
 --------------------------------------------------------------------
 Run the project, hard way
