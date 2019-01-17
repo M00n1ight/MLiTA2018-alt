@@ -33,13 +33,20 @@ def dijkstra_early_stop_way_un_sc(graph, node_from, node_to):
     queue = PQ.PriorityQueueByDict()
     # Get out of a node_from shortcut if it needs
     if node_from.hidden_in:
-        node_from_s1, weight_s1 = node_from.hidden_in.unpack_until(node_from, reverse=False)
-        node_from_s1 = node_from_s1[0]
-        node_from_s2, weight_s2 = node_from.hidden_in.unpack_until(node_from, reverse=True)
-        node_from_s2 = node_from_s2[0]
+        try:
+            node_from_s1, weight_s1 = node_from.hidden_in.unpack_until(node_from, reverse=False)
+            node_from_s1 = node_from_s1[0]
+            node_from_s2, weight_s2 = node_from.hidden_in.unpack_until(node_from, reverse=True)
+            node_from_s2 = node_from_s2[0]
 
-        queue.update(node_from_s1, weight_s1)
-        queue.update(node_from_s2, weight_s2)
+            queue.update(node_from_s1, weight_s1)
+            queue.update(node_from_s2, weight_s2)
+        except IndexError:
+            node_from_s1 = node_from.hidden_in.n_from
+            node_from_s2 = node_from.hidden_in.n_to
+            queue.update(node_from_s1)
+            queue.update(node_from_s2)
+            print('Warning! Not the whole path unpacked cause of Index Error')
     else:
         queue.update(node_from)
 
@@ -209,13 +216,20 @@ def astar_un_sc(graph, node_from, node_to):
     queue = PQ.PriorityQueueByDict()
     # Get out of a node_from shortcut if it needs
     if node_from.hidden_in:
-        node_from_s1, weight_s1 = node_from.hidden_in.unpack_until(node_from, reverse=False)
-        node_from_s1 = node_from_s1[0]
-        node_from_s2, weight_s2 = node_from.hidden_in.unpack_until(node_from, reverse=True)
-        node_from_s2 = node_from_s2[0]
+        try:
+            node_from_s1, weight_s1 = node_from.hidden_in.unpack_until(node_from, reverse=False)
+            node_from_s1 = node_from_s1[0]
+            node_from_s2, weight_s2 = node_from.hidden_in.unpack_until(node_from, reverse=True)
+            node_from_s2 = node_from_s2[0]
 
-        queue.update(node_from_s1, weight_s1)
-        queue.update(node_from_s2, weight_s2)
+            queue.update(node_from_s1, weight_s1)
+            queue.update(node_from_s2, weight_s2)
+        except IndexError:
+            node_from_s1 = node_from.hidden_in.n_from
+            node_from_s2 = node_from.hidden_in.n_to
+            queue.update(node_from_s1)
+            queue.update(node_from_s2)
+            print('Warning! Not the whole path unpacked cause of Index Error')
     else:
         queue.update(node_from)
 
@@ -393,13 +407,21 @@ def alt_un_sc(graph, node_from, node_to, k = 16):
     queue = PQ.PriorityQueueByDict()
     # Get out of a node_from shortcut if it needs
     if node_from.hidden_in:
-        node_from_s1, weight_s1 = node_from.hidden_in.unpack_until(node_from, reverse=False)
-        node_from_s1 = node_from_s1[0]
-        node_from_s2, weight_s2 = node_from.hidden_in.unpack_until(node_from, reverse=True)
-        node_from_s2 = node_from_s2[0]
+        try:
+            node_from_s1, weight_s1 = node_from.hidden_in.unpack_until(node_from, reverse=False)
+            node_from_s1 = node_from_s1[0]
+            node_from_s2, weight_s2 = node_from.hidden_in.unpack_until(node_from, reverse=True)
+            node_from_s2 = node_from_s2[0]
 
-        queue.update(node_from_s1, weight_s1)
-        queue.update(node_from_s2, weight_s2)
+            queue.update(node_from_s1, weight_s1)
+            queue.update(node_from_s2, weight_s2)
+        except IndexError:
+            node_from_s1 = node_from.hidden_in.n_from
+            node_from_s2 = node_from.hidden_in.n_to
+            queue.update(node_from_s1)
+            queue.update(node_from_s2)
+            print('Warning! Not the whole path unpacked cause of Index Error')
+
     else:
         queue.update(node_from)
 
