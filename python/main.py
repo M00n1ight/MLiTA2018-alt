@@ -9,7 +9,7 @@ sock.bind(('localhost', 8081))
 if len(sys.argv) > 1:
     current_city = sys.argv[1]
 else:
-    current_city = 'SPb3'
+    current_city = 'Paris'
 print('Current city: ' + current_city)
 
 graph = Gr.Graph()
