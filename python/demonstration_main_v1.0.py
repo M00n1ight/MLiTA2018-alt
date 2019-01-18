@@ -3,23 +3,35 @@ import classes.Graph as Gr
 import AlgoChooser as Chooser
 import sys
 
+
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('localhost', 8081))
 
-if len(sys.argv) > 1:
-    current_city = sys.argv[1]
-else:
-    current_city = 'London'
-print('Current city: ' + current_city)
+# if len(sys.argv) > 1:
+#     current_city = sys.argv[1]
+# else:
+#     current_city = 'London'
+# print('Current city: ' + current_city)
+#
+# graph = Gr.Graph()
+# graph.read_graph_from_csv_alt(current_city + '_nodes_alt.csv', current_city + '_roads.csv', file_name_shortcuts=current_city + '_shortcuts')
+# print(current_city + ' done')
 
-graph = Gr.Graph()
-# graph.read_graph_from_csv_alt('Toronto_nodes_alt.csv', 'Toronto_roads.csv')
-graph.read_graph_from_csv_alt(current_city + '_nodes_alt.csv', current_city + '_roads.csv', file_name_shortcuts=current_city + '_shortcuts')
-print(current_city + ' done')
+NAMES = ['SPb3', 'Toronto', 'Paris', 'London']
+maps = dict()
+
+for city in NAMES:
+    print('Reading ' + city)
+    maps.update({city: Gr.Graph()})
+    maps[city].read_graph_from_csv_alt(city + '_nodes_alt.csv',
+                                       city + '_roads.csv',
+                                       file_name_shortcuts=city + '_shortcuts')
+print('READING MAPS DONE')
 
 sock.listen(20)
 
 while True:
+    print("READY TO RESPONSE")
     conn, addr = sock.accept()
     conn.setblocking(True)
     conn.settimeout(1)
@@ -31,8 +43,13 @@ while True:
         if data1 == b'':
             raise RuntimeError("socket conn broke")
         if data1:
+            print('Got: ' + data1.decode('utf-8'))
+            # points = [float(x) for x in data1.decode('utf-8').split()[:-1:]]
             points = data1.decode('utf-8').split()
-            points = points[:4:]
+            queried_city = points[5]
+            if queried_city not in NAMES:
+                raise Exception('Bad city name')
+            points = points[:-1:]
             points = [float(x) for x in points]
             algorithm, algorithm_name = Chooser.get_algorithm_by_id(int(points[4]))
             # print(points)
@@ -41,11 +58,8 @@ while True:
             print('Calculating path')
 
             dist, paths, time = algorithm(
-                graph, points[0], points[1], points[2], points[3]
+                maps[queried_city], points[0], points[1], points[2], points[3]
             )
-
-            # for i in paths[0]:
-            #     print('{} {}'.format(i.x, i.y))
 
             path_f = ''
 
@@ -66,6 +80,9 @@ while True:
         else:
             print('No data in query!')
 
+    except Exception as ex:
+        print(ex)
+
     except socket.timeout:
         print('socket timeout')
         conn.send(b'timeout')
@@ -80,6 +97,5 @@ while True:
     #     conn.send(b'Unknown error')
 
     finally:
-        print('finally')
         conn.close()
 

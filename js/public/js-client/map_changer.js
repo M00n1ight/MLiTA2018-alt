@@ -25,6 +25,7 @@ function changeMap(city){
     })
 }
 
+
 let city_chooser = document.getElementById('city_chooser');
 city_chooser.addEventListener('change', function(event){
     if (graph) {
@@ -35,7 +36,7 @@ city_chooser.addEventListener('change', function(event){
         currentOffsety = 0;
         currentOffsetx = 0;
         disableButtons();
-        let city = city_chooser.options[city_chooser.selectedIndex].value;
+        city = city_chooser.options[city_chooser.selectedIndex].value;
         console.log('City changed to ' + city);
         changeMap(city);
     }

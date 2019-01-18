@@ -370,7 +370,7 @@ buttonFindPath.addEventListener('click', function(event){
     if (from && to) {
         console.log(from, to);
         $.ajax({
-            url: `/ajax/calculatePath?alg=${algorithmId}&fromLon=${from.lon}&fromLat=${from.lat}&toLon=${to.lon}&toLat=${to.lat}`,
+            url: `/ajax/calculatePath?city=${city}&alg=${algorithmId}&fromLon=${from.lon}&fromLat=${from.lat}&toLon=${to.lon}&toLat=${to.lat}`,
             success: function (data) {
                 console.log("DATA FETCH");
                 console.log(data);

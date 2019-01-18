@@ -11,7 +11,7 @@ module.exports = function(res, points){
             try {
                 console.log('Connected!');
                 let str = points.from.lon + ' ' + points.from.lat + ' '
-                    + points.to.lon + ' ' + points.to.lat + ' ' + points.algo;
+                    + points.to.lon + ' ' + points.to.lat + ' ' + points.algo + ' ' + points.city;
                 //console.log(str);
                 client.write(str, 'utf-8', function () {
                     console.log('Sent: ' + str)

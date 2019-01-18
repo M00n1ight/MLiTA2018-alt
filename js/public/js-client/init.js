@@ -1,4 +1,5 @@
 let detectedFrom, detectedTo;
+let city;
 
 function fromClickXYToShaderXY(x,y){
     let result = {};

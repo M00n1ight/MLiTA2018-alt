@@ -29,6 +29,8 @@ app.get('/ajax/calculatePath', function(req, res){
         lat: req.query.toLat
     };
     points.algo = req.query.alg;
+    points.city = req.query.city;
+    console.log('Required ' +  points.city);
     require('./send-points-to-get-path/main')(res, points);
 });
 
